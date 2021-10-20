@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package dashboard.rbac;
+
+option go_package = "github.com/gatewayorg/blue-dashboard/api/protos/rbac;rbac";
+
+import "google/protobuf/timestamp.proto";
+
+message Role {
+    uint64 id = 1;
+    string name = 2;
+    string detail = 3;
+    google.protobuf.Timestamp create_time = 4;
+    bool enable = 5;
+}
+
+message Rule {
+    uint64  id = 1;
+    string method = 2;
+    string path = 3;
+}
+
+message RoleRule {
+    uint64 role_id = 1;
+    repeated uint64 rules = 2;
+}

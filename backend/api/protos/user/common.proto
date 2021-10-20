@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package dashboard.user;
+
+option go_package = "github.com/gatewayorg/blue-dashboard/api/protos/user;user";
+
+import "rbac/common.proto";
+import "google/protobuf/timestamp.proto";
+
+message user {
+    uint64 id = 1;
+    string username = 2;
+    string alias_name = 3;
+    dashboard.rbac.Role role_id = 4;
+    google.protobuf.Timestamp create_time = 5;
+    bool enable = 6;
+}

@@ -1,0 +1,270 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "index/public_index.proto",
+    "version": "version not set"
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/index": {
+      "get": {
+        "operationId": "PublicIndex_Index",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/indexIndexResp"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "PublicIndex"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "indexCacheTotal": {
+      "type": "object",
+      "properties": {
+        "miss": {
+          "type": "string",
+          "format": "int64"
+        },
+        "bypass": {
+          "type": "string",
+          "format": "int64"
+        },
+        "expired": {
+          "type": "string",
+          "format": "int64"
+        },
+        "stale": {
+          "type": "string",
+          "format": "int64"
+        },
+        "updating": {
+          "type": "string",
+          "format": "int64"
+        },
+        "revalidated": {
+          "type": "string",
+          "format": "int64"
+        },
+        "hit": {
+          "type": "string",
+          "format": "int64"
+        },
+        "scarce": {
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "indexConnections": {
+      "type": "object",
+      "properties": {
+        "accepted": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "active": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "handled": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "reading": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "requests": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "waiting": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "writing": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "time": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "indexGatewayInfo": {
+      "type": "object",
+      "properties": {
+        "host_name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/indexGatewayStatus"
+        },
+        "shared_memory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/indexSharedMem"
+          }
+        },
+        "connections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/indexConnections"
+          }
+        },
+        "request_total": {
+          "$ref": "#/definitions/indexRequestTotal"
+        },
+        "cache_total": {
+          "$ref": "#/definitions/indexCacheTotal"
+        }
+      }
+    },
+    "indexGatewayStatus": {
+      "type": "string",
+      "enum": [
+        "UnHealth",
+        "Health"
+      ],
+      "default": "UnHealth"
+    },
+    "indexIndexResp": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/indexGatewayInfo"
+          }
+        }
+      }
+    },
+    "indexRequestTotal": {
+      "type": "object",
+      "properties": {
+        "in_bytes": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "out_bytes": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "_1xx": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "_2xx": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "_3xx": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "_4xx": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "_5xx": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "indexSharedMem": {
+      "type": "object",
+      "properties": {
+        "max_size": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "used_size": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "used_node": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "time": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "runtimeError": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string"
+        },
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

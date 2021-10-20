@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package dashboard.user;
+
+option go_package = "github.com/gatewayorg/blue-dashboard/api/protos/user;user";
+
+import "user/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "validate/validate.proto";
+
+service PublicUser {
+    rpc Login(LoginReq) returns(google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/user/login"
+            body: "*"
+        };
+    }
+    rpc SelectRole(SelectRoleReq) returns(google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/user/select/role"
+            body: "*"
+        };
+    }
+    rpc GetList(google.protobuf.Empty) returns(GetListResp) {
+        option (google.api.http) = {
+            get: "/user/list"
+        };
+    }
+}
+
+message LoginReq {
+    string username = 1;
+    string passwd = 2;
+}
+
+message SelectRoleReq {
+    uint64 id = 1 [(validate.rules).uint64.gt = 0];
+    uint64 role_id = 2 [(validate.rules).uint64.gt = 0];
+}
+
+message GetListResp {
+    repeated dashboard.user.user data = 1;
+}
+
+
+
+

@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package dashboard.rbac;
+
+option go_package = "github.com/gatewayorg/blue-dashboard/api/protos/rbac;rbac";
+
+import "rbac/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "validate/validate.proto";
+
+service PublicRole {
+  rpc GetList(google.protobuf.Empty) returns (GetListResp) {
+    option (google.api.http) = {
+      get : "/rbac/role"
+    };
+  }
+
+  rpc Add(AddRoleReq) returns(google.protobuf.Empty) {
+    option (google.api.http) = {
+      post : "/rbac/role"
+      body: "*"
+    };
+  }
+
+  rpc Update(UpdateRoleReq) returns(google.protobuf.Empty) {
+    option (google.api.http) = {
+      put : "/rbac/role"
+      body: "*"
+    };
+  }
+
+  rpc Del(DelRoleReq) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete : "/rbac/role"
+    };
+  }
+
+  rpc SelectRule(dashboard.rbac.RoleRule) returns(google.protobuf.Empty) {
+    option (google.api.http) = {
+      post : "/rbac/role/rule"
+      body: "*"
+    };
+  }
+}
+
+
+message GetListResp {
+    repeated dashboard.rbac.Role data = 1;
+}
+
+message AddRoleReq {
+    string name = 1[(validate.rules).string.min_len = 1];
+    string detail = 2[(validate.rules).string.min_len = 1];
+    bool enable = 3;
+}
+
+message UpdateRoleReq {
+    uint64 id = 1[(validate.rules).uint64.gt = 0];
+    string name = 2[(validate.rules).string.min_len = 1];
+    string detail = 3[(validate.rules).string.min_len = 1];
+    bool enable = 4;
+}
+
+message DelRoleReq {
+    uint64 id = 1[(validate.rules).uint64.gt = 0];
+}
+
+

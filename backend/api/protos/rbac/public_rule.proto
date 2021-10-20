@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package dashboard.rbac;
+
+option go_package = "github.com/gatewayorg/blue-dashboard/api/protos/rbac;rbac";
+
+import "rbac/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "validate/validate.proto";
+
+service PublicRule {
+    rpc GetList(google.protobuf.Empty) returns (GetRuleResp) {
+        option (google.api.http) = {
+            get : "/rbac/rule"
+        };
+    }
+
+    rpc Del(DelRuleReq) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete : "/rbac/rule"
+        };
+    }
+}
+
+message GetRuleResp {
+    repeated dashboard.rbac.Rule data = 1;
+}
+
+message DelRuleReq {
+    uint64 id = 1[(validate.rules).uint64.gt = 0];
+}
+

@@ -1,0 +1,3 @@
+package rlimit
+
+func SetupRLimit() {}
