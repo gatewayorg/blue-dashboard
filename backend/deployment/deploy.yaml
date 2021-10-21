@@ -18,7 +18,7 @@ spec:
       serviceAccount: "blue-dashboard"
       containers:
         - name: dashboard
-          image: "jinmz/blue-dashboard-backend:v0.0.2"
+          image: "jinmz/blue-dashboard-backend:v0.0.1"
           imagePullPolicy: IfNotPresent
           args:
             - --dsn
