@@ -87,6 +87,7 @@ const styles = (theme: Theme): StyleRules => ({
     backgroundColor: '#282c34',
     borderRadius:'8px',
     marginLeft:'10px',
+    border: '1px solid rgba(256,256,256,0.2)',
     '&:first-child': {
       marginLeft:'0'
     },
