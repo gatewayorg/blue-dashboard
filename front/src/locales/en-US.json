@@ -1,0 +1,11 @@
+{
+  "slider": {
+    
+  },
+  "header":{
+    "home":"Home",
+    "buy":"购买Token",
+    "farming":"Farming",
+    "my":"My"
+  }
+}
