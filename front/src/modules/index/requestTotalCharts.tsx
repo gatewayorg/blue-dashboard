@@ -50,11 +50,11 @@ const RequestTotalChartsComponent = ({
   requestCount,
 }: IAppsTableRowProps) => {
     const chartData  = [
-        { value: parseInt(requestCount._1xx), name: '_1xx' },
-        { value: parseInt(requestCount._2xx), name: '_2xx' },
-        { value: parseInt(requestCount._3xx), name: '_3xx' },
-        { value: parseInt(requestCount._4xx), name: '_4xx' },
-        { value: parseInt(requestCount._5xx), name: '_5xx' }
+        { value: parseInt(requestCount._1xx||"0"), name: '_1xx' },
+        { value: parseInt(requestCount._2xx||"0"), name: '_2xx' },
+        { value: parseInt(requestCount._3xx||"0"), name: '_3xx' },
+        { value: parseInt(requestCount._4xx||"0"), name: '_4xx' },
+        { value: parseInt(requestCount._5xx||"0"), name: '_5xx' }
     ]
     const requestTotalOption: ECOption = {
         legend: {
@@ -64,9 +64,12 @@ const RequestTotalChartsComponent = ({
                 color:"#fff"
             }
         },
+        tooltip: {
+            trigger: 'item'
+        },
         series: [
             {
-              name: 'Access From',
+              name: 'Request Count',
               type: 'pie',
               radius: '50%',
               label:{
@@ -79,19 +82,16 @@ const RequestTotalChartsComponent = ({
                   shadowBlur: 10,
                   shadowOffsetX: 0,
                   shadowColor: 'rgba(0, 0, 0, 0.5)'
+                },
+                label: {
+                    show: true,
+                    fontSize: '24',
+                    fontWeight: 'bold'
                 }
-              }
+              },
             }
         ],
         backgroundColor:'#282c34',
-        label:{
-            normal:{
-                show:false,
-                position: 'inside',
-                formatter:"{b}:{d}%"
-            }
-        },
-    
     };
     return (
         <>

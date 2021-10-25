@@ -98,7 +98,7 @@ const styles = (theme: Theme): StyleRules => ({
     textAlign:'center',
     margin:0,
     fontWeight:500,
-    lineHeight:'160px',
+    lineHeight:'100px',
   }
 });
 
@@ -114,14 +114,14 @@ export interface IDataInfo {
 }
 
 export interface ICacheTotal {
-  bypass?: string;
-  expired?:string;
-  hit?:string;
-  miss?:string;
-  revalidated?:string;
-  scarce?:string;
-  stale?:string;
-  updating?:string;
+  bypass: string;
+  expired:string;
+  hit:string;
+  miss:string;
+  revalidated:string;
+  scarce:string;
+  stale:string;
+  updating:string;
 }
 export interface IConnections {
   accepted: string;
@@ -164,9 +164,60 @@ const HomeComponent = ({
       .then(res => {
         if (res.status === 200) {
           const data = res.data.data;
-          setDataInfo(data);
-          console.log(data);
-
+          let newData:IDataInfo={
+            host_name:data[0].host_name,
+            cache_total: data[0].cache_total,
+            connections: data[0].connections,
+            ip: data[0].ip,
+            request_total: data[0].request_total,
+            shared_memory: data[0].shared_memory,
+            status: data[0].status,
+            version: data[0].version,
+          };
+          data.map((item: any,index:number)=>{
+            if(index > 0){
+              newData.host_name += " "+item.host_name;
+              newData.ip += " "+item.ip;
+              newData.status += " "+item.status;
+              newData.version += " "+item.version;
+              for(const cacheDetail in item.cache_total){
+                newData.cache_total[cacheDetail] = (parseInt(newData.cache_total[cacheDetail])+parseInt(item.cache_total[cacheDetail])).toString();
+              }
+              for(const requestDetail in item.request_total){
+                newData.request_total[requestDetail] = (parseInt(newData.request_total[requestDetail])+parseInt(item.request_total[requestDetail])).toString();
+              }
+  
+              const itemConnections = item.connections,newDataConnections= newData.connections;
+              itemConnections.map((connectionsDetail:any,index:number)=>{
+                newDataConnections.map((newConnect,count) =>{
+                  if(connectionsDetail.time === newConnect.time){
+                    for(const timerDetail in newConnect){
+                      if(timerDetail !== "time"){
+                        newData.connections[count][timerDetail] = (parseInt(newConnect[timerDetail])+parseInt(connectionsDetail[timerDetail])).toString();
+                      }
+                    }
+                  }
+                  return ""
+                })
+                return "";
+              });
+              item.shared_memory.map((sharedMemoryDetail:any,index:number)=>{
+                newData.shared_memory.map((newShared,count) =>{
+                  if(sharedMemoryDetail.time === newShared.time){
+                    for(const timerDetail in newShared){
+                      if(timerDetail !== "time"){
+                        newData.shared_memory[count][timerDetail] = (parseInt(newShared[timerDetail])+parseInt(sharedMemoryDetail[timerDetail])).toString();
+                      }
+                    }
+                  }
+                  return newData
+                })
+                return "";
+              })
+            }
+            return '';
+          })
+          setDataInfo([newData]);
         }
       })
   })
@@ -176,19 +227,31 @@ const HomeComponent = ({
         <div className={classes.block}>
           <div className={classes.hostInfo}>
             <p className={classes.countTitle}>Host Name</p>
-            <p className={classes.hostDetail}>{dataInfo?dataInfo[0].host_name:""}</p>
+            {dataInfo && dataInfo[0].host_name.split(" ").map((item,index)=>{
+              return <p key={item+index} className={classes.hostDetail}>{item}</p>
+              })
+            }
           </div>
           <div className={classes.hostInfo}>
             <p className={classes.countTitle}>IP</p>
-            <p className={classes.hostDetail}>{dataInfo?dataInfo[0].ip:""}</p>
+            {dataInfo && dataInfo[0].ip.split(" ").map((item,index)=>{
+              return <p key={item+index} className={classes.hostDetail}>{item}</p>
+              })
+            }
           </div>
           <div className={classes.hostInfo}>
             <p className={classes.countTitle}>Status</p>
-            <p className={classes.hostDetail}>{dataInfo?dataInfo[0].status:""}</p>
+            {dataInfo && dataInfo[0].status.split(" ").map((item,index)=>{
+              return <p key={item+index} className={classes.hostDetail}>{item}</p>
+              })
+            }
           </div>
           <div className={classes.hostInfo}>
             <p className={classes.countTitle}>Version</p>
-            <p className={classes.hostDetail}>{dataInfo?dataInfo[0].version:""}</p>
+            {dataInfo && dataInfo[0].version.split(" ").map((item,index)=>{
+              return <p key={item+index} className={classes.hostDetail}>{item}</p>
+              })
+            }
           </div>
         </div>
         <div className={classes.block}>

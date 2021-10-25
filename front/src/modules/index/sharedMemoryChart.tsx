@@ -71,10 +71,14 @@ connectionsData,
     let detail:LineSeriesOption = {
       name: legend,
       type: 'line',
-      stack: 'Total',
-      areaStyle: {},
+      areaStyle: {
+        opacity:0.3
+      },
       emphasis: {
         focus: 'series'
+      },
+      lineStyle:{
+        width:1,
       }
     }
     let detailData: number[] = []
