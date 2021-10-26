@@ -160,7 +160,7 @@ const HomeComponent = ({
   const [dataInfo, setDataInfo] = React.useState<IDataInfo[]>();
 
   useInitEffect(() => {
-    client.get(`/index?start=${parseInt((new Date().getTime()/1000 - 24*60*60).toString())}&end=${parseInt((new Date().getTime()/1000).toString())}`)
+    client.get(`/api/index?start=${parseInt((new Date().getTime()/1000 - 24*60*60).toString())}&end=${parseInt((new Date().getTime()/1000).toString())}`)
       .then(res => {
         if (res.status === 200) {
           const data = res.data.data;
