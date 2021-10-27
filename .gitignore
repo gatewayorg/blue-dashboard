@@ -17,3 +17,5 @@
 # dependencies
 node_modules
 dist
+front/node_modules
+front/package-lock.json

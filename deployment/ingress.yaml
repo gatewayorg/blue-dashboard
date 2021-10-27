@@ -1,0 +1,23 @@
+#apiVersion: networking.k8s.io/v1
+#kind: Ingress
+#metadata:
+#  name: dashboard-ingress
+#spec:
+#  rules:
+#    - host: dashboard.ankr.com.cn
+#      http:
+#        paths:
+#          - path: /api
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: blue-dashboard-svc
+#                port:
+#                  number: 8081
+#          - path: /
+#            pathType: Prefix
+#            backend:
+#              service:
+#                name: blue-dashboard-svc
+#                port:
+#                  number: 80
