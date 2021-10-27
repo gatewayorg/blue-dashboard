@@ -79,7 +79,8 @@ connectionsData,
       },
       lineStyle:{
         width:1,
-      }
+      },
+      symbol:'none'
     }
     let detailData: number[] = []
     connectionsData.map((item)=>{
