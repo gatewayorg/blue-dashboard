@@ -16,8 +16,8 @@ import (
 var (
 	log = mlog.Logger("repository")
 
-	MysqlClient   *DB
-	RuleIDMap     = make(map[string]uint64)
+	MysqlClient *DB
+	RuleIDMap   = make(map[string]uint64)
 
 	GatewayRepo Gateway
 	RbacRepo    Rbac
