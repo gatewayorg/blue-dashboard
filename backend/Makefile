@@ -7,7 +7,12 @@ all: proto swg build
 
 .PHONY: run
 run:
-	@./build/server
+	@./build/server \
+	--dsn "root:123@tcp(127.0.0.1:3306)/dashboard?charset=utf8mb4&parseTime=True" \
+	--gateway_source "host" \
+	--gateway_service "127.0.0.1" \
+	--init_username "admin2" \
+    --init_password "admin2"
 
 .PHONY: fmt
 fmt:

@@ -12,26 +12,6 @@
   ],
   "paths": {
     "/rbac/role": {
-      "get": {
-        "operationId": "PublicRole_GetList",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/rbacGetListResp"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response",
-            "schema": {
-              "$ref": "#/definitions/runtimeError"
-            }
-          }
-        },
-        "tags": [
-          "PublicRole"
-        ]
-      },
       "delete": {
         "operationId": "PublicRole_Del",
         "responses": {
@@ -122,6 +102,44 @@
         ]
       }
     },
+    "/rbac/role/list": {
+      "get": {
+        "operationId": "PublicRole_GetRole",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/rbacGetRoleResp"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "PublicRole"
+        ]
+      }
+    },
     "/rbac/role/rule": {
       "post": {
         "operationId": "PublicRole_SelectRule",
@@ -146,6 +164,38 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/rbacRoleRule"
+            }
+          }
+        ],
+        "tags": [
+          "PublicRole"
+        ]
+      }
+    },
+    "/rbac/role/status": {
+      "patch": {
+        "operationId": "PublicRole_SetStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/rbacSetStatusReq"
             }
           }
         ],
@@ -183,9 +233,13 @@
         }
       }
     },
-    "rbacGetListResp": {
+    "rbacGetRoleResp": {
       "type": "object",
       "properties": {
+        "total": {
+          "type": "string",
+          "format": "uint64"
+        },
         "data": {
           "type": "array",
           "items": {
@@ -214,6 +268,13 @@
         "enable": {
           "type": "boolean",
           "format": "boolean"
+        },
+        "rule_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uint64"
+          }
         }
       }
     },
@@ -230,6 +291,19 @@
             "type": "string",
             "format": "uint64"
           }
+        }
+      }
+    },
+    "rbacSetStatusReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "enable": {
+          "type": "boolean",
+          "format": "boolean"
         }
       }
     },

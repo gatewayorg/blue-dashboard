@@ -127,9 +127,11 @@ func (m *Rule) Validate() error {
 
 	// no validation rules for Id
 
+	// no validation rules for Service
+
 	// no validation rules for Method
 
-	// no validation rules for Path
+	// no validation rules for Detail
 
 	return nil
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/gatewayorg/blue-dashboard/internal/handler"
 	"github.com/gatewayorg/blue-dashboard/internal/repository"
 	"github.com/gatewayorg/blue-dashboard/internal/service"
+	"github.com/gatewayorg/blue-dashboard/pkg/jwt"
 	"github.com/gatewayorg/blue-dashboard/pkg/rlimit"
 	"github.com/gatewayorg/blue-dashboard/share"
 	"github.com/urfave/cli/v2"
@@ -50,6 +51,21 @@ func main() {
 			Value: time.Second * 15,
 			Usage: "the interval of get gateway metrics data",
 		},
+		&cli.StringFlag{
+			Name:  share.JWT_KEY,
+			Value: "blue-dashboard",
+			Usage: "jwt secret key",
+		},
+		&cli.StringFlag{
+			Name:  share.INIT_USERNAME,
+			Value: "",
+			Usage: "Dashboard initializes the user, the user has the highest authority",
+		},
+		&cli.StringFlag{
+			Name:  share.INIT_PASSWORD,
+			Value: "",
+			Usage: "dashboard initialize user password",
+		},
 	}
 
 	svr := cli.NewApp()
@@ -65,6 +81,13 @@ func main() {
 }
 
 func mainServe(c *cli.Context) error {
+	log.Info("init jwt")
+	jwtConf := jwt.MustLoadConfig()
+	if c.String(share.JWT_KEY) != "" {
+		jwtConf.Key = c.String(share.JWT_KEY)
+	}
+	jwt.InitGlobal(jwtConf)
+
 	log.Info("init repo")
 	repository.InitGlobal(c.String(share.DSN))
 
@@ -82,6 +105,13 @@ func mainServe(c *cli.Context) error {
 	log.Info("init rpc")
 	rpcServer := rpc.NewServerWithConfig()
 	handler.RegisterGRPC(rpcServer.Server)
+	handler.RegisterRule(rpcServer.Server,
+		"/grpc.health.v1.Health/Check",
+		"/grpc.health.v1.Health/Watch",
+		"/grpc.reflection.v1alpha.ServerReflection/ServerReflectionInfo",
+		"/dashboard.user.PublicUser/Login",
+	)
+	handler.RegisterUser(c.String(share.INIT_USERNAME), c.String(share.INIT_USERNAME))
 	rpcServer.MustListenAndServe()
 
 	log.Info("init rest")
@@ -90,6 +120,7 @@ func mainServe(c *cli.Context) error {
 	restServer := rest.NewServer(conf)
 	handler.MustRegisterREST(restServer.ServeMux, rpcServer.Address)
 	restServer.ListenAndServed()
+
 	app.Exit()
 	return nil
 }

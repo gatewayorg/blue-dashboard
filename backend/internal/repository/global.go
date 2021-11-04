@@ -4,23 +4,25 @@ import (
 	"github.com/Ankr-network/kit/mlog"
 	"github.com/gatewayorg/blue-dashboard/internal/model"
 	"go.uber.org/zap"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 )
 
 var (
-	MysqlClient *gorm.DB
+	MysqlClient *DB
 	log         = mlog.Logger("repository")
 
 	GatewayRepo Gateway
+	RbacRepo    Rbac
+	UserRepo    User
 )
 
 func InitGlobal(dsn string) {
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	MysqlClient = NewDB(dsn)
+	err := MysqlClient.AutoMigrate(model.GatewayMetrics{}, model.Role{}, model.Rule{}, model.User{})
 	if err != nil {
-		log.Panic("connect mysql", zap.Error(err))
+		log.Fatal("db migrate", zap.Error(err))
 	}
-	db.AutoMigrate(model.GatewayMetrics{})
 
-	GatewayRepo = NewGateway(db)
+	GatewayRepo = NewGateway(MysqlClient)
+	RbacRepo = NewRbac(MysqlClient)
+	UserRepo = NewUser(MysqlClient)
 }

@@ -38,7 +38,7 @@ type LoginReq struct {
 	unknownFields protoimpl.UnknownFields
 
 	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
-	Passwd   string `protobuf:"bytes,2,opt,name=passwd,proto3" json:"passwd,omitempty"`
+	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 }
 
 func (x *LoginReq) Reset() {
@@ -80,9 +80,56 @@ func (x *LoginReq) GetUsername() string {
 	return ""
 }
 
-func (x *LoginReq) GetPasswd() string {
+func (x *LoginReq) GetPassword() string {
 	if x != nil {
-		return x.Passwd
+		return x.Password
+	}
+	return ""
+}
+
+type LoginResp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	AccessToken string `protobuf:"bytes,1,opt,name=access_token,json=accessToken,proto3" json:"access_token,omitempty"`
+}
+
+func (x *LoginResp) Reset() {
+	*x = LoginResp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_public_user_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *LoginResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LoginResp) ProtoMessage() {}
+
+func (x *LoginResp) ProtoReflect() protoreflect.Message {
+	mi := &file_user_public_user_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LoginResp.ProtoReflect.Descriptor instead.
+func (*LoginResp) Descriptor() ([]byte, []int) {
+	return file_user_public_user_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *LoginResp) GetAccessToken() string {
+	if x != nil {
+		return x.AccessToken
 	}
 	return ""
 }
@@ -99,7 +146,7 @@ type SelectRoleReq struct {
 func (x *SelectRoleReq) Reset() {
 	*x = SelectRoleReq{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_public_user_proto_msgTypes[1]
+		mi := &file_user_public_user_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -112,7 +159,7 @@ func (x *SelectRoleReq) String() string {
 func (*SelectRoleReq) ProtoMessage() {}
 
 func (x *SelectRoleReq) ProtoReflect() protoreflect.Message {
-	mi := &file_user_public_user_proto_msgTypes[1]
+	mi := &file_user_public_user_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -125,7 +172,7 @@ func (x *SelectRoleReq) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SelectRoleReq.ProtoReflect.Descriptor instead.
 func (*SelectRoleReq) Descriptor() ([]byte, []int) {
-	return file_user_public_user_proto_rawDescGZIP(), []int{1}
+	return file_user_public_user_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *SelectRoleReq) GetId() uint64 {
@@ -142,18 +189,74 @@ func (x *SelectRoleReq) GetRoleId() uint64 {
 	return 0
 }
 
+type GetListReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Page     uint64 `protobuf:"varint,1,opt,name=page,proto3" json:"page,omitempty"`
+	PageSize uint64 `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+}
+
+func (x *GetListReq) Reset() {
+	*x = GetListReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_public_user_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetListReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetListReq) ProtoMessage() {}
+
+func (x *GetListReq) ProtoReflect() protoreflect.Message {
+	mi := &file_user_public_user_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetListReq.ProtoReflect.Descriptor instead.
+func (*GetListReq) Descriptor() ([]byte, []int) {
+	return file_user_public_user_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetListReq) GetPage() uint64 {
+	if x != nil {
+		return x.Page
+	}
+	return 0
+}
+
+func (x *GetListReq) GetPageSize() uint64 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
 type GetListResp struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data []*User `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Total uint64  `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	Data  []*User `protobuf:"bytes,2,rep,name=data,proto3" json:"data,omitempty"`
 }
 
 func (x *GetListResp) Reset() {
 	*x = GetListResp{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_user_public_user_proto_msgTypes[2]
+		mi := &file_user_public_user_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -166,7 +269,7 @@ func (x *GetListResp) String() string {
 func (*GetListResp) ProtoMessage() {}
 
 func (x *GetListResp) ProtoReflect() protoreflect.Message {
-	mi := &file_user_public_user_proto_msgTypes[2]
+	mi := &file_user_public_user_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -179,7 +282,14 @@ func (x *GetListResp) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetListResp.ProtoReflect.Descriptor instead.
 func (*GetListResp) Descriptor() ([]byte, []int) {
-	return file_user_public_user_proto_rawDescGZIP(), []int{2}
+	return file_user_public_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetListResp) GetTotal() uint64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
 }
 
 func (x *GetListResp) GetData() []*User {
@@ -187,6 +297,313 @@ func (x *GetListResp) GetData() []*User {
 		return x.Data
 	}
 	return nil
+}
+
+type AddReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
+	Passwd   string `protobuf:"bytes,2,opt,name=passwd,proto3" json:"passwd,omitempty"`
+	Name     string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	RoleId   uint64 `protobuf:"varint,4,opt,name=role_id,json=roleId,proto3" json:"role_id,omitempty"`
+	Enable   bool   `protobuf:"varint,5,opt,name=enable,proto3" json:"enable,omitempty"`
+}
+
+func (x *AddReq) Reset() {
+	*x = AddReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_public_user_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AddReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddReq) ProtoMessage() {}
+
+func (x *AddReq) ProtoReflect() protoreflect.Message {
+	mi := &file_user_public_user_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddReq.ProtoReflect.Descriptor instead.
+func (*AddReq) Descriptor() ([]byte, []int) {
+	return file_user_public_user_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *AddReq) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *AddReq) GetPasswd() string {
+	if x != nil {
+		return x.Passwd
+	}
+	return ""
+}
+
+func (x *AddReq) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *AddReq) GetRoleId() uint64 {
+	if x != nil {
+		return x.RoleId
+	}
+	return 0
+}
+
+func (x *AddReq) GetEnable() bool {
+	if x != nil {
+		return x.Enable
+	}
+	return false
+}
+
+type UpdateReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id     uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name   string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	RoleId uint64 `protobuf:"varint,3,opt,name=role_id,json=roleId,proto3" json:"role_id,omitempty"`
+	Enable bool   `protobuf:"varint,4,opt,name=enable,proto3" json:"enable,omitempty"`
+}
+
+func (x *UpdateReq) Reset() {
+	*x = UpdateReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_public_user_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateReq) ProtoMessage() {}
+
+func (x *UpdateReq) ProtoReflect() protoreflect.Message {
+	mi := &file_user_public_user_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateReq.ProtoReflect.Descriptor instead.
+func (*UpdateReq) Descriptor() ([]byte, []int) {
+	return file_user_public_user_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UpdateReq) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *UpdateReq) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *UpdateReq) GetRoleId() uint64 {
+	if x != nil {
+		return x.RoleId
+	}
+	return 0
+}
+
+func (x *UpdateReq) GetEnable() bool {
+	if x != nil {
+		return x.Enable
+	}
+	return false
+}
+
+type UpdatePwdReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	OldPasswd string `protobuf:"bytes,1,opt,name=old_passwd,json=oldPasswd,proto3" json:"old_passwd,omitempty"`
+	NewPasswd string `protobuf:"bytes,2,opt,name=new_passwd,json=newPasswd,proto3" json:"new_passwd,omitempty"`
+}
+
+func (x *UpdatePwdReq) Reset() {
+	*x = UpdatePwdReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_public_user_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdatePwdReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdatePwdReq) ProtoMessage() {}
+
+func (x *UpdatePwdReq) ProtoReflect() protoreflect.Message {
+	mi := &file_user_public_user_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdatePwdReq.ProtoReflect.Descriptor instead.
+func (*UpdatePwdReq) Descriptor() ([]byte, []int) {
+	return file_user_public_user_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *UpdatePwdReq) GetOldPasswd() string {
+	if x != nil {
+		return x.OldPasswd
+	}
+	return ""
+}
+
+func (x *UpdatePwdReq) GetNewPasswd() string {
+	if x != nil {
+		return x.NewPasswd
+	}
+	return ""
+}
+
+type SetStatusReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id     uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Enable bool   `protobuf:"varint,2,opt,name=enable,proto3" json:"enable,omitempty"`
+}
+
+func (x *SetStatusReq) Reset() {
+	*x = SetStatusReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_public_user_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SetStatusReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetStatusReq) ProtoMessage() {}
+
+func (x *SetStatusReq) ProtoReflect() protoreflect.Message {
+	mi := &file_user_public_user_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetStatusReq.ProtoReflect.Descriptor instead.
+func (*SetStatusReq) Descriptor() ([]byte, []int) {
+	return file_user_public_user_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *SetStatusReq) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *SetStatusReq) GetEnable() bool {
+	if x != nil {
+		return x.Enable
+	}
+	return false
+}
+
+type DeleteReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *DeleteReq) Reset() {
+	*x = DeleteReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_public_user_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DeleteReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteReq) ProtoMessage() {}
+
+func (x *DeleteReq) ProtoReflect() protoreflect.Message {
+	mi := &file_user_public_user_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteReq.ProtoReflect.Descriptor instead.
+func (*DeleteReq) Descriptor() ([]byte, []int) {
+	return file_user_public_user_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *DeleteReq) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
 }
 
 var File_user_public_user_proto protoreflect.FileDescriptor
@@ -201,41 +618,109 @@ var file_user_public_user_proto_rawDesc = []byte{
 	0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x65, 0x6d, 0x70, 0x74, 0x79,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x17, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65,
 	0x2f, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x61, 0x74, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22,
-	0x3e, 0x0a, 0x08, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x12, 0x1a, 0x0a, 0x08, 0x75,
-	0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75,
-	0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x70, 0x61, 0x73, 0x73, 0x77,
-	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x70, 0x61, 0x73, 0x73, 0x77, 0x64, 0x22,
-	0x4a, 0x0a, 0x0d, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71,
-	0x12, 0x17, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42,
-	0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x02, 0x69, 0x64, 0x12, 0x20, 0x0a, 0x07, 0x72, 0x6f, 0x6c,
-	0x65, 0x5f, 0x69, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32,
-	0x02, 0x20, 0x00, 0x52, 0x06, 0x72, 0x6f, 0x6c, 0x65, 0x49, 0x64, 0x22, 0x37, 0x0a, 0x0b, 0x47,
-	0x65, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x12, 0x28, 0x0a, 0x04, 0x64, 0x61,
-	0x74, 0x61, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62,
-	0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x52, 0x04,
-	0x64, 0x61, 0x74, 0x61, 0x32, 0x96, 0x02, 0x0a, 0x0a, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x55,
-	0x73, 0x65, 0x72, 0x12, 0x51, 0x0a, 0x05, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x18, 0x2e, 0x64,
-	0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x4c, 0x6f,
-	0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x16,
-	0x82, 0xd3, 0xe4, 0x93, 0x02, 0x10, 0x22, 0x0b, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x2f, 0x6c, 0x6f,
-	0x67, 0x69, 0x6e, 0x3a, 0x01, 0x2a, 0x12, 0x61, 0x0a, 0x0a, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74,
-	0x52, 0x6f, 0x6c, 0x65, 0x12, 0x1d, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64,
-	0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x53, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x52, 0x6f, 0x6c, 0x65,
+	0x5a, 0x0a, 0x08, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x12, 0x26, 0x0a, 0x08, 0x75,
+	0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x42, 0x0a, 0xfa,
+	0x42, 0x07, 0x72, 0x05, 0x10, 0x01, 0x18, 0xff, 0x01, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e,
+	0x61, 0x6d, 0x65, 0x12, 0x26, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x0a, 0xfa, 0x42, 0x07, 0x72, 0x05, 0x10, 0x01, 0x18, 0xff,
+	0x01, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x22, 0x2e, 0x0a, 0x09, 0x4c,
+	0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x12, 0x21, 0x0a, 0x0c, 0x61, 0x63, 0x63, 0x65,
+	0x73, 0x73, 0x5f, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0b,
+	0x61, 0x63, 0x63, 0x65, 0x73, 0x73, 0x54, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0x4a, 0x0a, 0x0d, 0x53,
+	0x65, 0x6c, 0x65, 0x63, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x12, 0x17, 0x0a, 0x02,
+	0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20,
+	0x00, 0x52, 0x02, 0x69, 0x64, 0x12, 0x20, 0x0a, 0x07, 0x72, 0x6f, 0x6c, 0x65, 0x5f, 0x69, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52,
+	0x06, 0x72, 0x6f, 0x6c, 0x65, 0x49, 0x64, 0x22, 0x4f, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x4c, 0x69,
+	0x73, 0x74, 0x52, 0x65, 0x71, 0x12, 0x1b, 0x0a, 0x04, 0x70, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x04, 0x70, 0x61,
+	0x67, 0x65, 0x12, 0x24, 0x0a, 0x09, 0x70, 0x61, 0x67, 0x65, 0x5f, 0x73, 0x69, 0x7a, 0x65, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x08,
+	0x70, 0x61, 0x67, 0x65, 0x53, 0x69, 0x7a, 0x65, 0x22, 0x4d, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x4c,
+	0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x04, 0x52, 0x05, 0x74, 0x6f, 0x74, 0x61, 0x6c, 0x12, 0x28, 0x0a,
+	0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x64, 0x61,
+	0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x75, 0x73, 0x65,
+	0x72, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0xae, 0x01, 0x0a, 0x06, 0x41, 0x64, 0x64, 0x52,
+	0x65, 0x71, 0x12, 0x26, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x42, 0x0a, 0xfa, 0x42, 0x07, 0x72, 0x05, 0x10, 0x01, 0x18, 0xff, 0x01,
+	0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x22, 0x0a, 0x06, 0x70, 0x61,
+	0x73, 0x73, 0x77, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x0a, 0xfa, 0x42, 0x07, 0x72,
+	0x05, 0x10, 0x01, 0x18, 0xff, 0x01, 0x52, 0x06, 0x70, 0x61, 0x73, 0x73, 0x77, 0x64, 0x12, 0x1e,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x42, 0x0a, 0xfa, 0x42,
+	0x07, 0x72, 0x05, 0x10, 0x01, 0x18, 0xff, 0x01, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20,
+	0x0a, 0x07, 0x72, 0x6f, 0x6c, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04, 0x42,
+	0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x06, 0x72, 0x6f, 0x6c, 0x65, 0x49, 0x64,
+	0x12, 0x16, 0x0a, 0x06, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x06, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x22, 0x7e, 0x0a, 0x09, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x52, 0x65, 0x71, 0x12, 0x17, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x02, 0x69, 0x64, 0x12, 0x1e,
+	0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x42, 0x0a, 0xfa, 0x42,
+	0x07, 0x72, 0x05, 0x10, 0x01, 0x18, 0xff, 0x01, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x20,
+	0x0a, 0x07, 0x72, 0x6f, 0x6c, 0x65, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x04, 0x42,
+	0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x06, 0x72, 0x6f, 0x6c, 0x65, 0x49, 0x64,
+	0x12, 0x16, 0x0a, 0x06, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x08,
+	0x52, 0x06, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x22, 0x4c, 0x0a, 0x0c, 0x55, 0x70, 0x64, 0x61,
+	0x74, 0x65, 0x50, 0x77, 0x64, 0x52, 0x65, 0x71, 0x12, 0x1d, 0x0a, 0x0a, 0x6f, 0x6c, 0x64, 0x5f,
+	0x70, 0x61, 0x73, 0x73, 0x77, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6f, 0x6c,
+	0x64, 0x50, 0x61, 0x73, 0x73, 0x77, 0x64, 0x12, 0x1d, 0x0a, 0x0a, 0x6e, 0x65, 0x77, 0x5f, 0x70,
+	0x61, 0x73, 0x73, 0x77, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x6e, 0x65, 0x77,
+	0x50, 0x61, 0x73, 0x73, 0x77, 0x64, 0x22, 0x3f, 0x0a, 0x0c, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61,
+	0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x12, 0x17, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x04, 0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x02, 0x69, 0x64, 0x12,
+	0x16, 0x0a, 0x06, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52,
+	0x06, 0x65, 0x6e, 0x61, 0x62, 0x6c, 0x65, 0x22, 0x24, 0x0a, 0x09, 0x44, 0x65, 0x6c, 0x65, 0x74,
+	0x65, 0x52, 0x65, 0x71, 0x12, 0x17, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x04,
+	0x42, 0x07, 0xfa, 0x42, 0x04, 0x32, 0x02, 0x20, 0x00, 0x52, 0x02, 0x69, 0x64, 0x32, 0xbe, 0x05,
+	0x0a, 0x0a, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x55, 0x73, 0x65, 0x72, 0x12, 0x54, 0x0a, 0x05,
+	0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x18, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72,
+	0x64, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x71, 0x1a,
+	0x19, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73, 0x65, 0x72,
+	0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x22, 0x16, 0x82, 0xd3, 0xe4, 0x93,
+	0x02, 0x10, 0x22, 0x0b, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x2f, 0x6c, 0x6f, 0x67, 0x69, 0x6e, 0x3a,
+	0x01, 0x2a, 0x12, 0x56, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x1a, 0x2e,
+	0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x47,
+	0x65, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x1b, 0x2e, 0x64, 0x61, 0x73, 0x68,
+	0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x47, 0x65, 0x74, 0x4c, 0x69,
+	0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x22, 0x12, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x0c, 0x12, 0x0a,
+	0x2f, 0x75, 0x73, 0x65, 0x72, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x12, 0x4b, 0x0a, 0x03, 0x41, 0x64,
+	0x64, 0x12, 0x16, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73,
+	0x65, 0x72, 0x2e, 0x41, 0x64, 0x64, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74,
+	0x79, 0x22, 0x14, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x0e, 0x22, 0x09, 0x2f, 0x75, 0x73, 0x65, 0x72,
+	0x2f, 0x61, 0x64, 0x64, 0x3a, 0x01, 0x2a, 0x12, 0x4d, 0x0a, 0x06, 0x55, 0x70, 0x64, 0x61, 0x74,
+	0x65, 0x12, 0x19, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73,
+	0x65, 0x72, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67,
+	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45,
+	0x6d, 0x70, 0x74, 0x79, 0x22, 0x10, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x0a, 0x1a, 0x05, 0x2f, 0x75,
+	0x73, 0x65, 0x72, 0x3a, 0x01, 0x2a, 0x12, 0x57, 0x0a, 0x09, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65,
+	0x50, 0x77, 0x64, 0x12, 0x1c, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e,
+	0x75, 0x73, 0x65, 0x72, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x50, 0x77, 0x64, 0x52, 0x65,
+	0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x14, 0x82, 0xd3, 0xe4, 0x93, 0x02,
+	0x0e, 0x32, 0x09, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x2f, 0x70, 0x77, 0x64, 0x3a, 0x01, 0x2a, 0x12,
+	0x5a, 0x0a, 0x09, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1c, 0x2e, 0x64,
+	0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x53, 0x65,
+	0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f,
+	0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70,
+	0x74, 0x79, 0x22, 0x17, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x11, 0x32, 0x0c, 0x2f, 0x75, 0x73, 0x65,
+	0x72, 0x2f, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x3a, 0x01, 0x2a, 0x12, 0x61, 0x0a, 0x0a, 0x53,
+	0x65, 0x6c, 0x65, 0x63, 0x74, 0x52, 0x6f, 0x6c, 0x65, 0x12, 0x1d, 0x2e, 0x64, 0x61, 0x73, 0x68,
+	0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x53, 0x65, 0x6c, 0x65, 0x63,
+	0x74, 0x52, 0x6f, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
+	0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79,
+	0x22, 0x1c, 0x82, 0xd3, 0xe4, 0x93, 0x02, 0x16, 0x32, 0x11, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x2f,
+	0x73, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x2f, 0x72, 0x6f, 0x6c, 0x65, 0x3a, 0x01, 0x2a, 0x12, 0x4e,
+	0x0a, 0x06, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x12, 0x19, 0x2e, 0x64, 0x61, 0x73, 0x68, 0x62,
+	0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65,
 	0x52, 0x65, 0x71, 0x1a, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f,
-	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x1c, 0x82, 0xd3, 0xe4,
-	0x93, 0x02, 0x16, 0x22, 0x11, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x2f, 0x73, 0x65, 0x6c, 0x65, 0x63,
-	0x74, 0x2f, 0x72, 0x6f, 0x6c, 0x65, 0x3a, 0x01, 0x2a, 0x12, 0x52, 0x0a, 0x07, 0x47, 0x65, 0x74,
-	0x4c, 0x69, 0x73, 0x74, 0x12, 0x16, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x1a, 0x1b, 0x2e, 0x64,
-	0x61, 0x73, 0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x47, 0x65,
-	0x74, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x73, 0x70, 0x22, 0x12, 0x82, 0xd3, 0xe4, 0x93, 0x02,
-	0x0c, 0x12, 0x0a, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x2f, 0x6c, 0x69, 0x73, 0x74, 0x42, 0x3b, 0x5a,
-	0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x61, 0x74, 0x65,
-	0x77, 0x61, 0x79, 0x6f, 0x72, 0x67, 0x2f, 0x62, 0x6c, 0x75, 0x65, 0x2d, 0x64, 0x61, 0x73, 0x68,
-	0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73,
-	0x2f, 0x75, 0x73, 0x65, 0x72, 0x3b, 0x75, 0x73, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x33,
+	0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x11, 0x82, 0xd3, 0xe4,
+	0x93, 0x02, 0x0b, 0x2a, 0x09, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x2f, 0x64, 0x65, 0x6c, 0x42, 0x3b,
+	0x5a, 0x39, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x67, 0x61, 0x74,
+	0x65, 0x77, 0x61, 0x79, 0x6f, 0x72, 0x67, 0x2f, 0x62, 0x6c, 0x75, 0x65, 0x2d, 0x64, 0x61, 0x73,
+	0x68, 0x62, 0x6f, 0x61, 0x72, 0x64, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x73, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x3b, 0x75, 0x73, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -250,27 +735,44 @@ func file_user_public_user_proto_rawDescGZIP() []byte {
 	return file_user_public_user_proto_rawDescData
 }
 
-var file_user_public_user_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_user_public_user_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_user_public_user_proto_goTypes = []interface{}{
 	(*LoginReq)(nil),      // 0: dashboard.user.LoginReq
-	(*SelectRoleReq)(nil), // 1: dashboard.user.SelectRoleReq
-	(*GetListResp)(nil),   // 2: dashboard.user.GetListResp
-	(*User)(nil),          // 3: dashboard.user.user
-	(*empty.Empty)(nil),   // 4: google.protobuf.Empty
+	(*LoginResp)(nil),     // 1: dashboard.user.LoginResp
+	(*SelectRoleReq)(nil), // 2: dashboard.user.SelectRoleReq
+	(*GetListReq)(nil),    // 3: dashboard.user.GetListReq
+	(*GetListResp)(nil),   // 4: dashboard.user.GetListResp
+	(*AddReq)(nil),        // 5: dashboard.user.AddReq
+	(*UpdateReq)(nil),     // 6: dashboard.user.UpdateReq
+	(*UpdatePwdReq)(nil),  // 7: dashboard.user.UpdatePwdReq
+	(*SetStatusReq)(nil),  // 8: dashboard.user.SetStatusReq
+	(*DeleteReq)(nil),     // 9: dashboard.user.DeleteReq
+	(*User)(nil),          // 10: dashboard.user.user
+	(*empty.Empty)(nil),   // 11: google.protobuf.Empty
 }
 var file_user_public_user_proto_depIdxs = []int32{
-	3, // 0: dashboard.user.GetListResp.data:type_name -> dashboard.user.user
-	0, // 1: dashboard.user.PublicUser.Login:input_type -> dashboard.user.LoginReq
-	1, // 2: dashboard.user.PublicUser.SelectRole:input_type -> dashboard.user.SelectRoleReq
-	4, // 3: dashboard.user.PublicUser.GetList:input_type -> google.protobuf.Empty
-	4, // 4: dashboard.user.PublicUser.Login:output_type -> google.protobuf.Empty
-	4, // 5: dashboard.user.PublicUser.SelectRole:output_type -> google.protobuf.Empty
-	2, // 6: dashboard.user.PublicUser.GetList:output_type -> dashboard.user.GetListResp
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	10, // 0: dashboard.user.GetListResp.data:type_name -> dashboard.user.user
+	0,  // 1: dashboard.user.PublicUser.Login:input_type -> dashboard.user.LoginReq
+	3,  // 2: dashboard.user.PublicUser.GetList:input_type -> dashboard.user.GetListReq
+	5,  // 3: dashboard.user.PublicUser.Add:input_type -> dashboard.user.AddReq
+	6,  // 4: dashboard.user.PublicUser.Update:input_type -> dashboard.user.UpdateReq
+	7,  // 5: dashboard.user.PublicUser.UpdatePwd:input_type -> dashboard.user.UpdatePwdReq
+	8,  // 6: dashboard.user.PublicUser.SetStatus:input_type -> dashboard.user.SetStatusReq
+	2,  // 7: dashboard.user.PublicUser.SelectRole:input_type -> dashboard.user.SelectRoleReq
+	9,  // 8: dashboard.user.PublicUser.Delete:input_type -> dashboard.user.DeleteReq
+	1,  // 9: dashboard.user.PublicUser.Login:output_type -> dashboard.user.LoginResp
+	4,  // 10: dashboard.user.PublicUser.GetList:output_type -> dashboard.user.GetListResp
+	11, // 11: dashboard.user.PublicUser.Add:output_type -> google.protobuf.Empty
+	11, // 12: dashboard.user.PublicUser.Update:output_type -> google.protobuf.Empty
+	11, // 13: dashboard.user.PublicUser.UpdatePwd:output_type -> google.protobuf.Empty
+	11, // 14: dashboard.user.PublicUser.SetStatus:output_type -> google.protobuf.Empty
+	11, // 15: dashboard.user.PublicUser.SelectRole:output_type -> google.protobuf.Empty
+	11, // 16: dashboard.user.PublicUser.Delete:output_type -> google.protobuf.Empty
+	9,  // [9:17] is the sub-list for method output_type
+	1,  // [1:9] is the sub-list for method input_type
+	1,  // [1:1] is the sub-list for extension type_name
+	1,  // [1:1] is the sub-list for extension extendee
+	0,  // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_user_public_user_proto_init() }
@@ -293,7 +795,7 @@ func file_user_public_user_proto_init() {
 			}
 		}
 		file_user_public_user_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SelectRoleReq); i {
+			switch v := v.(*LoginResp); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -305,7 +807,91 @@ func file_user_public_user_proto_init() {
 			}
 		}
 		file_user_public_user_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SelectRoleReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_public_user_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetListReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_public_user_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetListResp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_public_user_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AddReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_public_user_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_public_user_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdatePwdReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_public_user_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SetStatusReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_public_user_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DeleteReq); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -323,7 +909,7 @@ func file_user_public_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_user_public_user_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -349,9 +935,14 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type PublicUserClient interface {
-	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*empty.Empty, error)
+	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+	GetList(ctx context.Context, in *GetListReq, opts ...grpc.CallOption) (*GetListResp, error)
+	Add(ctx context.Context, in *AddReq, opts ...grpc.CallOption) (*empty.Empty, error)
+	Update(ctx context.Context, in *UpdateReq, opts ...grpc.CallOption) (*empty.Empty, error)
+	UpdatePwd(ctx context.Context, in *UpdatePwdReq, opts ...grpc.CallOption) (*empty.Empty, error)
+	SetStatus(ctx context.Context, in *SetStatusReq, opts ...grpc.CallOption) (*empty.Empty, error)
 	SelectRole(ctx context.Context, in *SelectRoleReq, opts ...grpc.CallOption) (*empty.Empty, error)
-	GetList(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetListResp, error)
+	Delete(ctx context.Context, in *DeleteReq, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
 type publicUserClient struct {
@@ -362,9 +953,54 @@ func NewPublicUserClient(cc grpc.ClientConnInterface) PublicUserClient {
 	return &publicUserClient{cc}
 }
 
-func (c *publicUserClient) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *publicUserClient) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
+	out := new(LoginResp)
 	err := c.cc.Invoke(ctx, "/dashboard.user.PublicUser/Login", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *publicUserClient) GetList(ctx context.Context, in *GetListReq, opts ...grpc.CallOption) (*GetListResp, error) {
+	out := new(GetListResp)
+	err := c.cc.Invoke(ctx, "/dashboard.user.PublicUser/GetList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *publicUserClient) Add(ctx context.Context, in *AddReq, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/dashboard.user.PublicUser/Add", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *publicUserClient) Update(ctx context.Context, in *UpdateReq, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/dashboard.user.PublicUser/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *publicUserClient) UpdatePwd(ctx context.Context, in *UpdatePwdReq, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/dashboard.user.PublicUser/UpdatePwd", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *publicUserClient) SetStatus(ctx context.Context, in *SetStatusReq, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/dashboard.user.PublicUser/SetStatus", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -380,9 +1016,9 @@ func (c *publicUserClient) SelectRole(ctx context.Context, in *SelectRoleReq, op
 	return out, nil
 }
 
-func (c *publicUserClient) GetList(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*GetListResp, error) {
-	out := new(GetListResp)
-	err := c.cc.Invoke(ctx, "/dashboard.user.PublicUser/GetList", in, out, opts...)
+func (c *publicUserClient) Delete(ctx context.Context, in *DeleteReq, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/dashboard.user.PublicUser/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -391,23 +1027,43 @@ func (c *publicUserClient) GetList(ctx context.Context, in *empty.Empty, opts ..
 
 // PublicUserServer is the server API for PublicUser service.
 type PublicUserServer interface {
-	Login(context.Context, *LoginReq) (*empty.Empty, error)
+	Login(context.Context, *LoginReq) (*LoginResp, error)
+	GetList(context.Context, *GetListReq) (*GetListResp, error)
+	Add(context.Context, *AddReq) (*empty.Empty, error)
+	Update(context.Context, *UpdateReq) (*empty.Empty, error)
+	UpdatePwd(context.Context, *UpdatePwdReq) (*empty.Empty, error)
+	SetStatus(context.Context, *SetStatusReq) (*empty.Empty, error)
 	SelectRole(context.Context, *SelectRoleReq) (*empty.Empty, error)
-	GetList(context.Context, *empty.Empty) (*GetListResp, error)
+	Delete(context.Context, *DeleteReq) (*empty.Empty, error)
 }
 
 // UnimplementedPublicUserServer can be embedded to have forward compatible implementations.
 type UnimplementedPublicUserServer struct {
 }
 
-func (*UnimplementedPublicUserServer) Login(context.Context, *LoginReq) (*empty.Empty, error) {
+func (*UnimplementedPublicUserServer) Login(context.Context, *LoginReq) (*LoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (*UnimplementedPublicUserServer) GetList(context.Context, *GetListReq) (*GetListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetList not implemented")
+}
+func (*UnimplementedPublicUserServer) Add(context.Context, *AddReq) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
+}
+func (*UnimplementedPublicUserServer) Update(context.Context, *UpdateReq) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (*UnimplementedPublicUserServer) UpdatePwd(context.Context, *UpdatePwdReq) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdatePwd not implemented")
+}
+func (*UnimplementedPublicUserServer) SetStatus(context.Context, *SetStatusReq) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetStatus not implemented")
 }
 func (*UnimplementedPublicUserServer) SelectRole(context.Context, *SelectRoleReq) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SelectRole not implemented")
 }
-func (*UnimplementedPublicUserServer) GetList(context.Context, *empty.Empty) (*GetListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetList not implemented")
+func (*UnimplementedPublicUserServer) Delete(context.Context, *DeleteReq) (*empty.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 
 func RegisterPublicUserServer(s *grpc.Server, srv PublicUserServer) {
@@ -432,6 +1088,96 @@ func _PublicUser_Login_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PublicUser_GetList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PublicUserServer).GetList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dashboard.user.PublicUser/GetList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PublicUserServer).GetList(ctx, req.(*GetListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PublicUser_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PublicUserServer).Add(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dashboard.user.PublicUser/Add",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PublicUserServer).Add(ctx, req.(*AddReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PublicUser_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PublicUserServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dashboard.user.PublicUser/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PublicUserServer).Update(ctx, req.(*UpdateReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PublicUser_UpdatePwd_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdatePwdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PublicUserServer).UpdatePwd(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dashboard.user.PublicUser/UpdatePwd",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PublicUserServer).UpdatePwd(ctx, req.(*UpdatePwdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PublicUser_SetStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetStatusReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PublicUserServer).SetStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/dashboard.user.PublicUser/SetStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PublicUserServer).SetStatus(ctx, req.(*SetStatusReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _PublicUser_SelectRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SelectRoleReq)
 	if err := dec(in); err != nil {
@@ -450,20 +1196,20 @@ func _PublicUser_SelectRole_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PublicUser_GetList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(empty.Empty)
+func _PublicUser_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(PublicUserServer).GetList(ctx, in)
+		return srv.(PublicUserServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/dashboard.user.PublicUser/GetList",
+		FullMethod: "/dashboard.user.PublicUser/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PublicUserServer).GetList(ctx, req.(*empty.Empty))
+		return srv.(PublicUserServer).Delete(ctx, req.(*DeleteReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -477,12 +1223,32 @@ var _PublicUser_serviceDesc = grpc.ServiceDesc{
 			Handler:    _PublicUser_Login_Handler,
 		},
 		{
+			MethodName: "GetList",
+			Handler:    _PublicUser_GetList_Handler,
+		},
+		{
+			MethodName: "Add",
+			Handler:    _PublicUser_Add_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _PublicUser_Update_Handler,
+		},
+		{
+			MethodName: "UpdatePwd",
+			Handler:    _PublicUser_UpdatePwd_Handler,
+		},
+		{
+			MethodName: "SetStatus",
+			Handler:    _PublicUser_SetStatus_Handler,
+		},
+		{
 			MethodName: "SelectRole",
 			Handler:    _PublicUser_SelectRole_Handler,
 		},
 		{
-			MethodName: "GetList",
-			Handler:    _PublicUser_GetList_Handler,
+			MethodName: "Delete",
+			Handler:    _PublicUser_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

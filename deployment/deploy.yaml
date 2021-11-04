@@ -28,6 +28,10 @@ spec:
             - "kube-system"
             - --gateway_service
             - "blue-gw-svc"
+            - --init_username
+            - "admin"
+            - --init_password
+            - "admin123"
           ports:
             - name: backend
               containerPort: 8081

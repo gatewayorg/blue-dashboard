@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"github.com/gatewayorg/blue-dashboard/internal/model"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -12,21 +11,21 @@ type Gateway interface {
 	GetMetricsInTime(_ context.Context, start time.Time, end time.Time) ([]*model.GatewayMetrics, error)
 }
 
-type GatewayImpl struct {
-	repo *gorm.DB
+type gatewayImpl struct {
+	*DB
 }
 
-func NewGateway(db *gorm.DB) *GatewayImpl {
-	return &GatewayImpl{repo: db}
+func NewGateway(db *DB) *gatewayImpl {
+	return &gatewayImpl{DB: db}
 }
 
-func (g *GatewayImpl) AddMetrics(_ context.Context, metrics *model.GatewayMetrics) error {
-	res := g.repo.Create(metrics)
+func (g *gatewayImpl) AddMetrics(ctx context.Context, metrics *model.GatewayMetrics) error {
+	res := g.GetTxFromContext(ctx).Create(metrics)
 	return res.Error
 }
 
-func (g *GatewayImpl) GetMetricsInTime(_ context.Context, start time.Time, end time.Time) ([]*model.GatewayMetrics, error) {
+func (g *gatewayImpl) GetMetricsInTime(ctx context.Context, start time.Time, end time.Time) ([]*model.GatewayMetrics, error) {
 	var metrics []*model.GatewayMetrics
-	res := g.repo.Where("created_at BETWEEN ? AND ?", start, end).Find(&metrics)
+	res := g.GetTxFromContext(ctx).Where("created_at BETWEEN ? AND ?", start, end).Find(&metrics)
 	return metrics, res.Error
 }

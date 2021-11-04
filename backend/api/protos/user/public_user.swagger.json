@@ -11,6 +11,101 @@
     "application/json"
   ],
   "paths": {
+    "/user": {
+      "put": {
+        "operationId": "PublicUser_Update",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userUpdateReq"
+            }
+          }
+        ],
+        "tags": [
+          "PublicUser"
+        ]
+      }
+    },
+    "/user/add": {
+      "post": {
+        "operationId": "PublicUser_Add",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userAddReq"
+            }
+          }
+        ],
+        "tags": [
+          "PublicUser"
+        ]
+      }
+    },
+    "/user/del": {
+      "delete": {
+        "operationId": "PublicUser_Delete",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "PublicUser"
+        ]
+      }
+    },
     "/user/list": {
       "get": {
         "operationId": "PublicUser_GetList",
@@ -28,6 +123,22 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
         "tags": [
           "PublicUser"
         ]
@@ -40,7 +151,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "properties": {}
+              "$ref": "#/definitions/userLoginResp"
             }
           },
           "default": {
@@ -65,8 +176,40 @@
         ]
       }
     },
+    "/user/pwd": {
+      "patch": {
+        "operationId": "PublicUser_UpdatePwd",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userUpdatePwdReq"
+            }
+          }
+        ],
+        "tags": [
+          "PublicUser"
+        ]
+      }
+    },
     "/user/select/role": {
-      "post": {
+      "patch": {
         "operationId": "PublicUser_SelectRole",
         "responses": {
           "200": {
@@ -96,6 +239,38 @@
           "PublicUser"
         ]
       }
+    },
+    "/user/status": {
+      "patch": {
+        "operationId": "PublicUser_SetStatus",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response",
+            "schema": {
+              "$ref": "#/definitions/runtimeError"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/userSetStatusReq"
+            }
+          }
+        ],
+        "tags": [
+          "PublicUser"
+        ]
+      }
     }
   },
   "definitions": {
@@ -108,29 +283,6 @@
         "value": {
           "type": "string",
           "format": "byte"
-        }
-      }
-    },
-    "rbacRole": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uint64"
-        },
-        "name": {
-          "type": "string"
-        },
-        "detail": {
-          "type": "string"
-        },
-        "create_time": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "enable": {
-          "type": "boolean",
-          "format": "boolean"
         }
       }
     },
@@ -155,9 +307,35 @@
         }
       }
     },
+    "userAddReq": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "passwd": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role_id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "enable": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    },
     "userGetListResp": {
       "type": "object",
       "properties": {
+        "total": {
+          "type": "string",
+          "format": "uint64"
+        },
         "data": {
           "type": "array",
           "items": {
@@ -172,7 +350,15 @@
         "username": {
           "type": "string"
         },
-        "passwd": {
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "userLoginResp": {
+      "type": "object",
+      "properties": {
+        "access_token": {
           "type": "string"
         }
       }
@@ -190,6 +376,50 @@
         }
       }
     },
+    "userSetStatusReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "enable": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    },
+    "userUpdatePwdReq": {
+      "type": "object",
+      "properties": {
+        "old_passwd": {
+          "type": "string"
+        },
+        "new_passwd": {
+          "type": "string"
+        }
+      }
+    },
+    "userUpdateReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "role_id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "enable": {
+          "type": "boolean",
+          "format": "boolean"
+        }
+      }
+    },
     "useruser": {
       "type": "object",
       "properties": {
@@ -200,19 +430,26 @@
         "username": {
           "type": "string"
         },
-        "alias_name": {
+        "name": {
           "type": "string"
-        },
-        "role_id": {
-          "$ref": "#/definitions/rbacRole"
-        },
-        "create_time": {
-          "type": "string",
-          "format": "date-time"
         },
         "enable": {
           "type": "boolean",
           "format": "boolean"
+        },
+        "create_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "role_id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "role_name": {
+          "type": "string"
+        },
+        "role_detail": {
+          "type": "string"
         }
       }
     }

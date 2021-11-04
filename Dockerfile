@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine as backend
+FROM golang:1.15-alpine as backend
 LABEL backend=blue-dashboard
 WORKDIR /src
 

@@ -43,9 +43,19 @@ func (m *LoginReq) Validate() error {
 		return nil
 	}
 
-	// no validation rules for Username
+	if l := utf8.RuneCountInString(m.GetUsername()); l < 1 || l > 255 {
+		return LoginReqValidationError{
+			field:  "Username",
+			reason: "value length must be between 1 and 255 runes, inclusive",
+		}
+	}
 
-	// no validation rules for Passwd
+	if l := utf8.RuneCountInString(m.GetPassword()); l < 1 || l > 255 {
+		return LoginReqValidationError{
+			field:  "Password",
+			reason: "value length must be between 1 and 255 runes, inclusive",
+		}
+	}
 
 	return nil
 }
@@ -103,6 +113,72 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = LoginReqValidationError{}
+
+// Validate checks the field values on LoginResp with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *LoginResp) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for AccessToken
+
+	return nil
+}
+
+// LoginRespValidationError is the validation error returned by
+// LoginResp.Validate if the designated constraints aren't met.
+type LoginRespValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e LoginRespValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e LoginRespValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e LoginRespValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e LoginRespValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e LoginRespValidationError) ErrorName() string { return "LoginRespValidationError" }
+
+// Error satisfies the builtin error interface
+func (e LoginRespValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sLoginResp.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = LoginRespValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = LoginRespValidationError{}
 
 // Validate checks the field values on SelectRoleReq with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
@@ -183,6 +259,84 @@ var _ interface {
 	ErrorName() string
 } = SelectRoleReqValidationError{}
 
+// Validate checks the field values on GetListReq with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *GetListReq) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetPage() <= 0 {
+		return GetListReqValidationError{
+			field:  "Page",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	if m.GetPageSize() <= 0 {
+		return GetListReqValidationError{
+			field:  "PageSize",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	return nil
+}
+
+// GetListReqValidationError is the validation error returned by
+// GetListReq.Validate if the designated constraints aren't met.
+type GetListReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetListReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetListReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetListReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetListReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetListReqValidationError) ErrorName() string { return "GetListReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetListReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetListReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetListReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetListReqValidationError{}
+
 // Validate checks the field values on GetListResp with the rules defined in
 // the proto definition for this message. If any rules are violated, an error
 // is returned.
@@ -190,6 +344,8 @@ func (m *GetListResp) Validate() error {
 	if m == nil {
 		return nil
 	}
+
+	// no validation rules for Total
 
 	for idx, item := range m.GetData() {
 		_, _ = idx, item
@@ -262,3 +418,398 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = GetListRespValidationError{}
+
+// Validate checks the field values on AddReq with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *AddReq) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if l := utf8.RuneCountInString(m.GetUsername()); l < 1 || l > 255 {
+		return AddReqValidationError{
+			field:  "Username",
+			reason: "value length must be between 1 and 255 runes, inclusive",
+		}
+	}
+
+	if l := utf8.RuneCountInString(m.GetPasswd()); l < 1 || l > 255 {
+		return AddReqValidationError{
+			field:  "Passwd",
+			reason: "value length must be between 1 and 255 runes, inclusive",
+		}
+	}
+
+	if l := utf8.RuneCountInString(m.GetName()); l < 1 || l > 255 {
+		return AddReqValidationError{
+			field:  "Name",
+			reason: "value length must be between 1 and 255 runes, inclusive",
+		}
+	}
+
+	if m.GetRoleId() <= 0 {
+		return AddReqValidationError{
+			field:  "RoleId",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	// no validation rules for Enable
+
+	return nil
+}
+
+// AddReqValidationError is the validation error returned by AddReq.Validate if
+// the designated constraints aren't met.
+type AddReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e AddReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e AddReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e AddReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e AddReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e AddReqValidationError) ErrorName() string { return "AddReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e AddReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sAddReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = AddReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = AddReqValidationError{}
+
+// Validate checks the field values on UpdateReq with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *UpdateReq) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetId() <= 0 {
+		return UpdateReqValidationError{
+			field:  "Id",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	if l := utf8.RuneCountInString(m.GetName()); l < 1 || l > 255 {
+		return UpdateReqValidationError{
+			field:  "Name",
+			reason: "value length must be between 1 and 255 runes, inclusive",
+		}
+	}
+
+	if m.GetRoleId() <= 0 {
+		return UpdateReqValidationError{
+			field:  "RoleId",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	// no validation rules for Enable
+
+	return nil
+}
+
+// UpdateReqValidationError is the validation error returned by
+// UpdateReq.Validate if the designated constraints aren't met.
+type UpdateReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdateReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdateReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdateReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdateReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdateReqValidationError) ErrorName() string { return "UpdateReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e UpdateReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdateReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdateReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdateReqValidationError{}
+
+// Validate checks the field values on UpdatePwdReq with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *UpdatePwdReq) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for OldPasswd
+
+	// no validation rules for NewPasswd
+
+	return nil
+}
+
+// UpdatePwdReqValidationError is the validation error returned by
+// UpdatePwdReq.Validate if the designated constraints aren't met.
+type UpdatePwdReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e UpdatePwdReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e UpdatePwdReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e UpdatePwdReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e UpdatePwdReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e UpdatePwdReqValidationError) ErrorName() string { return "UpdatePwdReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e UpdatePwdReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sUpdatePwdReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = UpdatePwdReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = UpdatePwdReqValidationError{}
+
+// Validate checks the field values on SetStatusReq with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *SetStatusReq) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetId() <= 0 {
+		return SetStatusReqValidationError{
+			field:  "Id",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	// no validation rules for Enable
+
+	return nil
+}
+
+// SetStatusReqValidationError is the validation error returned by
+// SetStatusReq.Validate if the designated constraints aren't met.
+type SetStatusReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SetStatusReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SetStatusReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SetStatusReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SetStatusReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SetStatusReqValidationError) ErrorName() string { return "SetStatusReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SetStatusReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSetStatusReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SetStatusReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SetStatusReqValidationError{}
+
+// Validate checks the field values on DeleteReq with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *DeleteReq) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetId() <= 0 {
+		return DeleteReqValidationError{
+			field:  "Id",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	return nil
+}
+
+// DeleteReqValidationError is the validation error returned by
+// DeleteReq.Validate if the designated constraints aren't met.
+type DeleteReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e DeleteReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e DeleteReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e DeleteReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e DeleteReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e DeleteReqValidationError) ErrorName() string { return "DeleteReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e DeleteReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sDeleteReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = DeleteReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = DeleteReqValidationError{}

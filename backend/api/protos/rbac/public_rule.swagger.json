@@ -11,9 +11,9 @@
     "application/json"
   ],
   "paths": {
-    "/rbac/rule": {
+    "/rbac/rule/list": {
       "get": {
-        "operationId": "PublicRule_GetList",
+        "operationId": "PublicRule_GetRule",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -28,12 +28,30 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
         "tags": [
           "PublicRule"
         ]
-      },
-      "delete": {
-        "operationId": "PublicRule_Del",
+      }
+    },
+    "/rbac/set/detail": {
+      "patch": {
+        "operationId": "PublicRule_SetDetail",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -50,11 +68,12 @@
         },
         "parameters": [
           {
-            "name": "id",
-            "in": "query",
-            "required": false,
-            "type": "string",
-            "format": "uint64"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/rbacSetDetailReq"
+            }
           }
         ],
         "tags": [
@@ -79,6 +98,10 @@
     "rbacGetRuleResp": {
       "type": "object",
       "properties": {
+        "total": {
+          "type": "string",
+          "format": "uint64"
+        },
         "data": {
           "type": "array",
           "items": {
@@ -94,10 +117,25 @@
           "type": "string",
           "format": "uint64"
         },
+        "service": {
+          "type": "string"
+        },
         "method": {
           "type": "string"
         },
-        "path": {
+        "detail": {
+          "type": "string"
+        }
+      }
+    },
+    "rbacSetDetailReq": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "detail": {
           "type": "string"
         }
       }
