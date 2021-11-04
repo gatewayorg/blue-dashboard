@@ -7,11 +7,12 @@ import (
 )
 
 type Rbac interface {
+	GetRoleAll(ctx context.Context) ([]*model.Role, error)
 	GetRole(ctx context.Context, page, pageSize int) ([]*model.Role, error)
 	GetRoleCount(ctx context.Context) (int64, error)
-	AddRole(ctx context.Context, role *model.Role) error
+	AddRole(ctx context.Context, role *model.Role) (id uint64, err error)
 	FindRoleById(ctx context.Context, id uint64) (*model.Role, error)
-	SaveRole(ctx context.Context, id uint64, role *model.Role) error
+	SaveRole(ctx context.Context, role *model.Role) error
 	SelectRole(ctx context.Context, id uint64, rules []uint64) error
 	SetRoleStatus(ctx context.Context, id uint64, enable bool) error
 	DeleteRole(ctx context.Context, id uint64) error
@@ -32,6 +33,12 @@ func NewRbac(db *DB) *rbacImpl {
 	return &rbacImpl{DB: db}
 }
 
+func (r *rbacImpl) GetRoleAll(ctx context.Context) ([]*model.Role, error) {
+	roles := new([]*model.Role)
+	res := r.GetTxFromContext(ctx).Find(roles)
+	return *roles, res.Error
+}
+
 func (r *rbacImpl) GetRole(ctx context.Context, page, pageSize int) ([]*model.Role, error) {
 	roles := new([]*model.Role)
 	res := r.GetTxFromContext(ctx).Limit(pageSize).Offset((page - 1) * pageSize).Find(roles)
@@ -43,8 +50,9 @@ func (r *rbacImpl) GetRoleCount(ctx context.Context) (num int64, err error) {
 	return num, res.Error
 }
 
-func (r *rbacImpl) AddRole(ctx context.Context, role *model.Role) error {
-	return r.GetTxFromContext(ctx).Create(role).Error
+func (r *rbacImpl) AddRole(ctx context.Context, role *model.Role) (id uint64, err error) {
+	err = r.GetTxFromContext(ctx).Create(role).Error
+	return role.ID, err
 }
 
 func (r *rbacImpl) FindRoleById(ctx context.Context, id uint64) (*model.Role, error) {
@@ -53,8 +61,8 @@ func (r *rbacImpl) FindRoleById(ctx context.Context, id uint64) (*model.Role, er
 	return &role, res.Error
 }
 
-func (r *rbacImpl) SaveRole(ctx context.Context, id uint64, role *model.Role) error {
-	return r.GetTxFromContext(ctx).Where("id = ?", id).Save(role).Error
+func (r *rbacImpl) SaveRole(ctx context.Context, role *model.Role) error {
+	return r.GetTxFromContext(ctx).Save(role).Error
 }
 
 func (r *rbacImpl) SelectRole(ctx context.Context, id uint64, ruleIDs []uint64) error {

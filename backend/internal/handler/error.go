@@ -22,7 +22,9 @@ func handleErr(err error) error {
 	case ErrAuthorization:
 		return status.Errorf(codes.Unauthenticated, "%v", err)
 	case gorm.ErrRecordNotFound:
-		return status.Error(codes.NotFound, "not found")
+		return status.Errorf(codes.NotFound, "not found")
+	case service.ErrUserDisable:
+		return status.Errorf(codes.Unauthenticated, "%v", err)
 	}
 	return status.Errorf(codes.Internal, "Internal Error")
 }

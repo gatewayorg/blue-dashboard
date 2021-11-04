@@ -14,6 +14,12 @@ type Role struct {
 	CreateAt time.Time
 }
 
+type RoleSave struct {
+	Name   string
+	Detail string
+	Enable bool
+}
+
 type Rule struct {
 	ID      uint64
 	Service string `gorm:"type:varchar(255)"`

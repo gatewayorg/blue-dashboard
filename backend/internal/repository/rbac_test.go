@@ -40,16 +40,21 @@ func TestRbacImpl_Role(t *testing.T) {
 	ctx := testRepo.ContextWithTx(context.Background(), tx)
 	defer tx.Rollback()
 
-	err := testRbac.AddRole(ctx, &model.Role{
+	id, err := testRbac.AddRole(ctx, &model.Role{
 		Name:     "admin",
 		Detail:   "superman",
 		Enable:   false,
 		RuleIDs:  fields.Uint64s{},
 		CreateAt: time.Now(),
 	})
+	t.Log(id)
 	assert.NoError(t, err)
 
-	roles, err := testRbac.GetRole(ctx, 1, 10)
+	roles, err := testRbac.GetRoleAll(ctx)
+	assert.NoError(t, err)
+	t.Log(roles)
+
+	roles, err = testRbac.GetRole(ctx, 1, 10)
 	assert.NoError(t, err)
 
 	num, err := testRbac.GetRuleCount(ctx)
@@ -63,7 +68,7 @@ func TestRbacImpl_Role(t *testing.T) {
 	r.Name = "aaaa"
 	r.Enable = true
 	r.RuleIDs = fields.Uint64s{1, 2, 3}
-	err = testRbac.SaveRole(ctx, r.ID, r)
+	err = testRbac.SaveRole(ctx, r)
 	assert.NoError(t, err)
 
 	err = testRbac.SelectRole(ctx, r.ID, []uint64{1, 2, 3, 4})

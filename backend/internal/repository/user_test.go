@@ -13,7 +13,7 @@ func TestUserImpl(t *testing.T) {
 	ctx := testRepo.ContextWithTx(context.Background(), tx)
 	defer tx.Rollback()
 
-	err := testUser.Add(ctx, &model.User{
+	id, err := testUser.Add(ctx, &model.User{
 		Username: "member",
 		Password: "123123",
 		Name:     "member",
@@ -21,6 +21,7 @@ func TestUserImpl(t *testing.T) {
 		Enable:   false,
 		CreateAt: time.Now(),
 	})
+	t.Log(id)
 	assert.NoError(t, err)
 
 	num, err := testUser.GetCountByRoleId(ctx, 1)
@@ -45,7 +46,7 @@ func TestUserImpl(t *testing.T) {
 	err = testUser.SelectRole(ctx, user.ID, 2)
 	assert.NoError(t, err)
 
-	users, err := testUser.GetAll(ctx, 1, 10)
+	users, err := testUser.GetList(ctx, 1, 10)
 	assert.NoError(t, err)
 	for _, v := range users {
 		t.Log(v)

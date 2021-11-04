@@ -50,7 +50,7 @@ func (p *PublicUser) GetList(ctx context.Context, req *user.GetListReq) (*user.G
 }
 
 func (p *PublicUser) Add(ctx context.Context, req *user.AddReq) (*empty.Empty, error) {
-	err := p.svc.Add(ctx, &model.User{
+	_, err := p.svc.Add(ctx, &model.User{
 		Username: req.Username,
 		Password: req.Passwd,
 		Name:     req.Name,

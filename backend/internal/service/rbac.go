@@ -14,6 +14,7 @@ var (
 type Rbac interface {
 	GetRuleList(ctx context.Context, page, pageSize int) (total int64, data []*model.Rule, err error)
 	GetRoleList(ctx context.Context, page, pageSize int) (total int64, data []*model.Role, err error)
+	SaveRole(ctx context.Context, id uint64, role *model.RoleSave) error
 	DeleteRole(ctx context.Context, id uint64) error
 }
 
@@ -48,6 +49,17 @@ func (r *rbacImpl) GetRoleList(ctx context.Context, page, pageSize int) (total i
 		return 0, nil, err
 	}
 	return total, data, nil
+}
+
+func (r *rbacImpl) SaveRole(ctx context.Context, id uint64, role *model.RoleSave) error {
+	roleInfo, err := r.repo.FindRoleById(ctx, id)
+	if err != nil {
+		return err
+	}
+	roleInfo.Enable = role.Enable
+	roleInfo.Name = role.Name
+	roleInfo.Detail = role.Detail
+	return r.repo.SaveRole(ctx, roleInfo)
 }
 
 func (r *rbacImpl) DeleteRole(ctx context.Context, id uint64) error {

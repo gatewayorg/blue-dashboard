@@ -7,9 +7,10 @@ import (
 
 type User interface {
 	GetAllCount(ctx context.Context) (int64, error)
-	GetAll(ctx context.Context, page, pageSize int) ([]*model.UserRole, error)
+	GetAll(ctx context.Context) ([]*model.User, error)
+	GetList(ctx context.Context, page, pageSize int) ([]*model.UserRole, error)
 	GetCountByRoleId(ctx context.Context, roleID uint64) (int64, error)
-	Add(ctx context.Context, user *model.User) error
+	Add(ctx context.Context, user *model.User) (id uint64, err error)
 	Save(ctx context.Context, user *model.User) error
 	UpdatePwd(ctx context.Context, id uint64, passwd string) error
 	SetStatus(ctx context.Context, id uint64, enable bool) error
@@ -32,7 +33,13 @@ func (u *userImpl) GetAllCount(ctx context.Context) (num int64, err error) {
 	return
 }
 
-func (u *userImpl) GetAll(ctx context.Context, page, pageSize int) (userRoles []*model.UserRole, err error) {
+func (u *userImpl) GetAll(ctx context.Context) (users []*model.User, err error) {
+	users = []*model.User{}
+	err = u.GetTxFromContext(ctx).Find(&users).Error
+	return users, err
+}
+
+func (u *userImpl) GetList(ctx context.Context, page, pageSize int) (userRoles []*model.UserRole, err error) {
 	userRoles = []*model.UserRole{}
 	err = u.GetTxFromContext(ctx).Model(&model.User{}).Select("users.*, roles.id role_id, roles.name role_name, roles.detail role_detail").
 		Joins("left join roles on users.role_id = roles.id").
@@ -49,8 +56,9 @@ func (u *userImpl) GetCountByRoleId(ctx context.Context, roleID uint64) (num int
 	return num, nil
 }
 
-func (u *userImpl) Add(ctx context.Context, user *model.User) error {
-	return u.GetTxFromContext(ctx).Create(user).Error
+func (u *userImpl) Add(ctx context.Context, user *model.User) (id uint64, err error) {
+	err = u.GetTxFromContext(ctx).Create(user).Error
+	return user.ID, err
 }
 
 func (u *userImpl) Save(ctx context.Context, user *model.User) error {

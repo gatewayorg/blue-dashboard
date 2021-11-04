@@ -11,11 +11,12 @@ import (
 
 var (
 	ErrVerifyPassword = errors.New("Password verification failed")
+	ErrUserDisable    = errors.New("User is disabled")
 )
 
 type User interface {
 	GetList(ctx context.Context, page, pageSize int) (total int64, data []*model.UserRole, err error)
-	Add(ctx context.Context, user *model.User) error
+	Add(ctx context.Context, user *model.User) (id uint64, err error)
 	Save(ctx context.Context, id uint64, user *model.UserSave) error
 	UpdatePwd(ctx context.Context, id uint64, oldPasswd, newPasswd string) error
 	SelectRole(ctx context.Context, id uint64, roleID uint64) error
@@ -40,20 +41,20 @@ func (u *userImpl) GetList(ctx context.Context, page, pageSize int) (total int64
 		log.Error("get user all count", zap.Error(err))
 		return
 	}
-	data, err = u.repo.GetAll(ctx, page, pageSize)
+	data, err = u.repo.GetList(ctx, page, pageSize)
 	if err != nil {
-		log.Error("get all", zap.Int("page", page), zap.Int("pagesize", pageSize), zap.Error(err))
+		log.Error("get list", zap.Int("page", page), zap.Int("pagesize", pageSize), zap.Error(err))
 		return
 	}
 	return
 }
 
-func (u *userImpl) Add(ctx context.Context, user *model.User) (err error) {
+func (u *userImpl) Add(ctx context.Context, user *model.User) (id uint64, err error) {
 	passwd := user.Password
 	user.Password, err = password.Hash(passwd)
 	if err != nil {
 		log.Error("password hash", zap.String("passwd", passwd), zap.Error(err))
-		return err
+		return 0, err
 	}
 
 	return u.repo.Add(ctx, user)
@@ -104,6 +105,11 @@ func (u *userImpl) Authenticate(ctx context.Context, username, passwd string) (I
 	if err != nil {
 		return 0, err
 	}
+
+	if !user.Enable {
+		return 0, ErrUserDisable
+	}
+
 	if err = password.Verify(user.Password, passwd); err != nil {
 		return 0, err
 	}

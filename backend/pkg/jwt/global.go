@@ -27,7 +27,7 @@ func MustLoadConfig() *Config {
 	return out
 }
 
-func InitGlobal(config *Config) {
+func GlobalInit(config *Config) {
 	var err error
 	Sign, err = NewSigner(SignKey(config.Key), Iss(config.Iss), ExpireDuration(config.ExpiredDuration))
 	if err != nil {

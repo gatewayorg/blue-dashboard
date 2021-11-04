@@ -37,7 +37,7 @@ func (p *PublicRole) GetRole(ctx context.Context, req *rbac.GetRoleReq) (*rbac.G
 }
 
 func (p *PublicRole) Add(ctx context.Context, req *rbac.AddRoleReq) (*empty.Empty, error) {
-	err := p.repo.AddRole(ctx, &model.Role{
+	_, err := p.repo.AddRole(ctx, &model.Role{
 		Name:     req.Name,
 		Detail:   req.Detail,
 		Enable:   req.Enable,
@@ -51,7 +51,7 @@ func (p *PublicRole) Add(ctx context.Context, req *rbac.AddRoleReq) (*empty.Empt
 }
 
 func (p *PublicRole) Update(ctx context.Context, req *rbac.UpdateRoleReq) (*empty.Empty, error) {
-	err := p.repo.SaveRole(ctx, req.Id, &model.Role{
+	err := p.svc.SaveRole(ctx, req.Id, &model.RoleSave{
 		Name:   req.Name,
 		Detail: req.Detail,
 		Enable: req.Enable,

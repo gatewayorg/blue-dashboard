@@ -86,10 +86,10 @@ func mainServe(c *cli.Context) error {
 	if c.String(share.JWT_KEY) != "" {
 		jwtConf.Key = c.String(share.JWT_KEY)
 	}
-	jwt.InitGlobal(jwtConf)
+	jwt.GlobalInit(jwtConf)
 
 	log.Info("init repo")
-	repository.InitGlobal(c.String(share.DSN))
+	repository.GlobalInit(c.String(share.DSN))
 
 	log.Info("init service")
 	service.GlobalInitWithConfig(&service.Config{
@@ -103,22 +103,30 @@ func mainServe(c *cli.Context) error {
 	handler.GlobalInit()
 
 	log.Info("init rpc")
-	rpcServer := rpc.NewServerWithConfig()
+	rpcServer := rpc.NewServerWithConfig(handler.Authorization(
+		"/dashboard.user.PublicUser/Login",
+		"/dashboard.index.PublicIndex/Index",
+	))
 	handler.RegisterGRPC(rpcServer.Server)
-	handler.RegisterRule(rpcServer.Server,
+	rpcServer.MustListenAndServe()
+
+	log.Info("register & load")
+	repository.RegisterRule(rpcServer.Server,
 		"/grpc.health.v1.Health/Check",
 		"/grpc.health.v1.Health/Watch",
 		"/grpc.reflection.v1alpha.ServerReflection/ServerReflectionInfo",
 		"/dashboard.user.PublicUser/Login",
+		"/dashboard.index.PublicIndex/Index",
 	)
-	handler.RegisterUser(c.String(share.INIT_USERNAME), c.String(share.INIT_USERNAME))
-	rpcServer.MustListenAndServe()
+	repository.RegisterSuperRole()
+	repository.RegisterSuperUser(c.String(share.INIT_USERNAME), c.String(share.INIT_USERNAME))
 
 	log.Info("init rest")
 	conf := rest.MustLoadConfig()
 	conf.ListenAddress = c.String(share.PORT)
 	restServer := rest.NewServer(conf)
 	handler.MustRegisterREST(restServer.ServeMux, rpcServer.Address)
+	restServer.Handler = handler.RecordRequestUrl(restServer.Handler)
 	restServer.ListenAndServed()
 
 	app.Exit()
