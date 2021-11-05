@@ -7,6 +7,7 @@ import (
 	"github.com/gatewayorg/blue-dashboard/internal/repository"
 	"github.com/gatewayorg/blue-dashboard/pkg/password"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 var (
@@ -57,6 +58,15 @@ func (u *userImpl) Add(ctx context.Context, user *model.User) (id uint64, err er
 		return 0, err
 	}
 
+	_, err = u.rbacRepo.FindRoleById(ctx, user.RoleID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return 0, ErrRoleNotFound
+		}
+		log.Error("find role by id", zap.Uint64("id", user.RoleID), zap.Error(err))
+		return 0, err
+	}
+
 	return u.repo.Add(ctx, user)
 }
 
@@ -94,6 +104,9 @@ func (u *userImpl) UpdatePwd(ctx context.Context, id uint64, oldPasswd, newPassw
 func (u *userImpl) SelectRole(ctx context.Context, id uint64, roleID uint64) error {
 	_, err := u.rbacRepo.FindRoleById(ctx, roleID)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return ErrRoleNotFound
+		}
 		log.Error("find role by id", zap.Uint64("id", roleID), zap.Error(err))
 		return err
 	}

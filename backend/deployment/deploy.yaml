@@ -18,7 +18,7 @@ spec:
       serviceAccount: "blue-dashboard"
       containers:
         - name: dashboard
-          image: "jinmz/blue-dashboard-backend:v0.0.1"
+          image: "jinmz/blue-dashboard-backend:v0.2"
           imagePullPolicy: IfNotPresent
           args:
             - --dsn
@@ -27,6 +27,8 @@ spec:
             - "kube-system"
             - --gateway_service
             - "blue-gw-svc"
+            - --jwt_key
+            - "dsahduia@dsa!123$da.,dsazDSa--=#das"
             - --init_username
             - "admin"
             - --init_password

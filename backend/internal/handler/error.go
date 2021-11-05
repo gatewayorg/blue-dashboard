@@ -29,6 +29,8 @@ func handleErr(err error) error {
 		return status.Errorf(codes.Unauthenticated, "%v", err)
 	case service.ErrVerifyPassword:
 		return status.Errorf(codes.InvalidArgument, "%v", err)
+	case service.ErrRoleNotFound:
+		return status.Errorf(codes.NotFound, "%v", err)
 	}
 	return status.Errorf(codes.Internal, "Internal Error")
 }

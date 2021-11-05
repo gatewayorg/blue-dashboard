@@ -8,8 +8,9 @@ import (
 )
 
 var (
-	ErrUserInUsing = errors.New("user is using")
-	ErrRoleDisable = errors.New("role is disabled")
+	ErrUserInUsing  = errors.New("user is using")
+	ErrRoleDisable  = errors.New("role is disabled")
+	ErrRoleNotFound = errors.New("role not found")
 )
 
 type Rbac interface {
