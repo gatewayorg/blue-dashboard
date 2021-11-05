@@ -1,45 +1,32 @@
 package jwt
 
 import (
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"time"
 )
 
-var testSigningKey = []byte("AllYourBase")
+var testSign Signer
 
-type myClaims struct {
-	username string
-	*jwt.RegisteredClaims
-}
-
-func TestJwtSing(t *testing.T) {
-	// Create the Claims
-	claims := &myClaims{
-		username: "jmz",
-		RegisteredClaims: &jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
-			Issuer:    "test",
-		},
+func TestMain(m *testing.M) {
+	config := MustLoadConfig()
+	var err error
+	testSign, err = NewSigner(SignKey(config.Key), Iss(config.Iss), ExpireDuration(config.ExpiredDuration))
+	if err == nil {
+		m.Run()
 	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	ss, err := token.SignedString(testSigningKey)
-
-	assert.NoError(t, err)
-	t.Log(ss)
 }
 
-func TestJwtParse(t *testing.T) {
-	tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ0ZXN0IiwiZXhwIjoxNjM1NzUzMTgyfQ.POrtrW3vPzVozlx2C6Ww_BGVuFF8HYM16tcH9TzHxPA"
-	token, err := jwt.ParseWithClaims(tokenString, &myClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return testSigningKey, nil
-	})
-	assert.NoError(t, err)
+func TestSign(t *testing.T) {
+	token, err := testSign.Sign(2, "admin2")
 
+	assert.NoError(t, err)
 	t.Log(token)
-	if claims, ok := token.Claims.(*myClaims); ok && token.Valid {
-		t.Log(claims)
-	}
+}
+
+func TestParseSign(t *testing.T) {
+	tokenString := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6MSwiVXNlcm5hbWUiOiJhZG1pbjIiLCJpc3MiOiJibHVlLWRhc2hib2FyZCIsImV4cCI6MTYzNjE2NTI1NywiaWF0IjoxNjM2MDc4ODU3fQ.cS8hDN1yLxNOWUBWl4cMedxZMyQqIx0R_bt3nOBOGBE"
+	claim, err := testSign.ParseClaims(tokenString)
+	assert.NoError(t, err)
+	t.Log(claim.ID, claim.Username)
+
 }

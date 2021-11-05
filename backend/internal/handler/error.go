@@ -25,6 +25,10 @@ func handleErr(err error) error {
 		return status.Errorf(codes.NotFound, "not found")
 	case service.ErrUserDisable:
 		return status.Errorf(codes.Unauthenticated, "%v", err)
+	case service.ErrRoleDisable:
+		return status.Errorf(codes.Unauthenticated, "%v", err)
+	case service.ErrVerifyPassword:
+		return status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	return status.Errorf(codes.Internal, "Internal Error")
 }

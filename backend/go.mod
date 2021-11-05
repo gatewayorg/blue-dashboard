@@ -6,7 +6,6 @@ replace github.com/gatewayorg/blue-dashboard/api v0.0.0 => ./api
 
 require (
 	github.com/Ankr-network/kit v1.8.7
-	github.com/cornelk/hashmap v1.0.1
 	github.com/gatewayorg/blue-dashboard/api v0.0.0
 	github.com/golang-jwt/jwt/v4 v4.1.0
 	github.com/golang/protobuf v1.5.2

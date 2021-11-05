@@ -104,11 +104,11 @@ func (p *signerImpl) SignWithTime(id uint64, username string, t time.Time) (stri
 func (p *signerImpl) ParseClaims(tokenString string) (*Claims, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
 		// 必要的验证 RS256
-		if token.Method == p.signMethod {
+		if token.Method != p.signMethod {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
-		checkIss := token.Claims.(jwt.MapClaims).VerifyIssuer(p.iss, false)
+		checkIss := token.Claims.(*Claims).VerifyIssuer(p.iss)
 		if !checkIss {
 			return nil, errors.New("Invalid issuer.")
 		}

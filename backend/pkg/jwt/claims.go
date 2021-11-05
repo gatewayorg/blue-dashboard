@@ -7,3 +7,7 @@ type Claims struct {
 	Username string
 	*jwt.RegisteredClaims
 }
+
+func (c *Claims) VerifyIssuer(iss string) bool {
+	return c.Issuer == iss
+}

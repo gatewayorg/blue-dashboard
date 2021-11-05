@@ -52,9 +52,9 @@ func main() {
 			Usage: "the interval of get gateway metrics data",
 		},
 		&cli.StringFlag{
-			Name:  share.JWT_KEY,
-			Value: "blue-dashboard",
-			Usage: "jwt secret key",
+			Name:     share.JWT_KEY,
+			Usage:    "jwt secret key",
+			Required: true,
 		},
 		&cli.StringFlag{
 			Name:  share.INIT_USERNAME,
@@ -83,9 +83,7 @@ func main() {
 func mainServe(c *cli.Context) error {
 	log.Info("init jwt")
 	jwtConf := jwt.MustLoadConfig()
-	if c.String(share.JWT_KEY) != "" {
-		jwtConf.Key = c.String(share.JWT_KEY)
-	}
+	jwtConf.Key = c.String(share.JWT_KEY)
 	jwt.GlobalInit(jwtConf)
 
 	log.Info("init repo")

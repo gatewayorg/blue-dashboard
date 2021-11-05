@@ -9,6 +9,7 @@ import (
 
 var (
 	ErrUserInUsing = errors.New("user is using")
+	ErrRoleDisable = errors.New("role is disabled")
 )
 
 type Rbac interface {

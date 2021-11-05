@@ -12,7 +12,8 @@ run:
 	--gateway_source "host" \
 	--gateway_service "127.0.0.1" \
 	--init_username "admin2" \
-    --init_password "admin2"
+    --init_password "admin2" \
+    --jwt_key "blue-dashboard"
 
 .PHONY: fmt
 fmt:

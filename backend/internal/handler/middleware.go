@@ -35,7 +35,7 @@ func Authorization(whiteList ...string) grpc.UnaryServerInterceptor {
 			return nil, handleErr(err)
 		}
 		if !user.Enable {
-			return nil, handleErr(ErrAuthorization)
+			return nil, handleErr(service.ErrUserDisable)
 		}
 
 		role, err := repository.RbacRepo.FindRoleById(ctx, user.RoleID)
@@ -45,7 +45,7 @@ func Authorization(whiteList ...string) grpc.UnaryServerInterceptor {
 		}
 
 		if !role.Enable {
-			return nil, handleErr(service.ErrUserDisable)
+			return nil, handleErr(service.ErrRoleDisable)
 		}
 
 		for _, v := range role.RuleIDs {

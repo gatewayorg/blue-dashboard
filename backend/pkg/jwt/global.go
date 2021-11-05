@@ -15,7 +15,7 @@ var (
 type Config struct {
 	Iss             string        `env:"JWT_ISSUER" envDefault:"blue-dashboard"`
 	ExpiredDuration time.Duration `env:"JWT_EXPIRED_TIME" envDefault:"24h"`
-	Key             string        `env:"JWT_KEY" envDefault:"blue-dashboard"`
+	Key             string        `env:"JWT_KEY" envDefault:""`
 }
 
 func MustLoadConfig() *Config {

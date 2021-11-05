@@ -10,8 +10,8 @@ import (
 )
 
 var (
-	ErrVerifyPassword = errors.New("Password verification failed")
-	ErrUserDisable    = errors.New("User is disabled")
+	ErrVerifyPassword = errors.New("password verification failed")
+	ErrUserDisable    = errors.New("user is disabled")
 )
 
 type User interface {
