@@ -36,20 +36,100 @@ var (
 // define the regex for a UUID once up-front
 var _public_role_uuidPattern = regexp.MustCompile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
 
-// Validate checks the field values on GetListResp with the rules defined in
-// the proto definition for this message. If any rules are violated, an error
-// is returned.
-func (m *GetListResp) Validate() error {
+// Validate checks the field values on GetRoleReq with the rules defined in the
+// proto definition for this message. If any rules are violated, an error is returned.
+func (m *GetRoleReq) Validate() error {
 	if m == nil {
 		return nil
 	}
+
+	if m.GetPage() <= 0 {
+		return GetRoleReqValidationError{
+			field:  "Page",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	if m.GetPageSize() <= 0 {
+		return GetRoleReqValidationError{
+			field:  "PageSize",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	return nil
+}
+
+// GetRoleReqValidationError is the validation error returned by
+// GetRoleReq.Validate if the designated constraints aren't met.
+type GetRoleReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e GetRoleReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e GetRoleReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e GetRoleReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e GetRoleReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e GetRoleReqValidationError) ErrorName() string { return "GetRoleReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e GetRoleReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sGetRoleReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = GetRoleReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = GetRoleReqValidationError{}
+
+// Validate checks the field values on GetRoleResp with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *GetRoleResp) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	// no validation rules for Total
 
 	for idx, item := range m.GetData() {
 		_, _ = idx, item
 
 		if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				return GetListRespValidationError{
+				return GetRoleRespValidationError{
 					field:  fmt.Sprintf("Data[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
@@ -62,9 +142,9 @@ func (m *GetListResp) Validate() error {
 	return nil
 }
 
-// GetListRespValidationError is the validation error returned by
-// GetListResp.Validate if the designated constraints aren't met.
-type GetListRespValidationError struct {
+// GetRoleRespValidationError is the validation error returned by
+// GetRoleResp.Validate if the designated constraints aren't met.
+type GetRoleRespValidationError struct {
 	field  string
 	reason string
 	cause  error
@@ -72,22 +152,22 @@ type GetListRespValidationError struct {
 }
 
 // Field function returns field value.
-func (e GetListRespValidationError) Field() string { return e.field }
+func (e GetRoleRespValidationError) Field() string { return e.field }
 
 // Reason function returns reason value.
-func (e GetListRespValidationError) Reason() string { return e.reason }
+func (e GetRoleRespValidationError) Reason() string { return e.reason }
 
 // Cause function returns cause value.
-func (e GetListRespValidationError) Cause() error { return e.cause }
+func (e GetRoleRespValidationError) Cause() error { return e.cause }
 
 // Key function returns key value.
-func (e GetListRespValidationError) Key() bool { return e.key }
+func (e GetRoleRespValidationError) Key() bool { return e.key }
 
 // ErrorName returns error name.
-func (e GetListRespValidationError) ErrorName() string { return "GetListRespValidationError" }
+func (e GetRoleRespValidationError) ErrorName() string { return "GetRoleRespValidationError" }
 
 // Error satisfies the builtin error interface
-func (e GetListRespValidationError) Error() string {
+func (e GetRoleRespValidationError) Error() string {
 	cause := ""
 	if e.cause != nil {
 		cause = fmt.Sprintf(" | caused by: %v", e.cause)
@@ -99,14 +179,14 @@ func (e GetListRespValidationError) Error() string {
 	}
 
 	return fmt.Sprintf(
-		"invalid %sGetListResp.%s: %s%s",
+		"invalid %sGetRoleResp.%s: %s%s",
 		key,
 		e.field,
 		e.reason,
 		cause)
 }
 
-var _ error = GetListRespValidationError{}
+var _ error = GetRoleRespValidationError{}
 
 var _ interface {
 	Field() string
@@ -114,7 +194,7 @@ var _ interface {
 	Key() bool
 	Cause() error
 	ErrorName() string
-} = GetListRespValidationError{}
+} = GetRoleRespValidationError{}
 
 // Validate checks the field values on AddRoleReq with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.
@@ -123,17 +203,17 @@ func (m *AddRoleReq) Validate() error {
 		return nil
 	}
 
-	if utf8.RuneCountInString(m.GetName()) < 1 {
+	if l := utf8.RuneCountInString(m.GetName()); l < 1 || l > 255 {
 		return AddRoleReqValidationError{
 			field:  "Name",
-			reason: "value length must be at least 1 runes",
+			reason: "value length must be between 1 and 255 runes, inclusive",
 		}
 	}
 
-	if utf8.RuneCountInString(m.GetDetail()) < 1 {
+	if l := utf8.RuneCountInString(m.GetDetail()); l < 1 || l > 255 {
 		return AddRoleReqValidationError{
 			field:  "Detail",
-			reason: "value length must be at least 1 runes",
+			reason: "value length must be between 1 and 255 runes, inclusive",
 		}
 	}
 
@@ -211,17 +291,17 @@ func (m *UpdateRoleReq) Validate() error {
 		}
 	}
 
-	if utf8.RuneCountInString(m.GetName()) < 1 {
+	if l := utf8.RuneCountInString(m.GetName()); l < 1 || l > 255 {
 		return UpdateRoleReqValidationError{
 			field:  "Name",
-			reason: "value length must be at least 1 runes",
+			reason: "value length must be between 1 and 255 runes, inclusive",
 		}
 	}
 
-	if utf8.RuneCountInString(m.GetDetail()) < 1 {
+	if l := utf8.RuneCountInString(m.GetDetail()); l < 1 || l > 255 {
 		return UpdateRoleReqValidationError{
 			field:  "Detail",
-			reason: "value length must be at least 1 runes",
+			reason: "value length must be between 1 and 255 runes, inclusive",
 		}
 	}
 
@@ -283,6 +363,80 @@ var _ interface {
 	Cause() error
 	ErrorName() string
 } = UpdateRoleReqValidationError{}
+
+// Validate checks the field values on SetStatusReq with the rules defined in
+// the proto definition for this message. If any rules are violated, an error
+// is returned.
+func (m *SetStatusReq) Validate() error {
+	if m == nil {
+		return nil
+	}
+
+	if m.GetId() <= 0 {
+		return SetStatusReqValidationError{
+			field:  "Id",
+			reason: "value must be greater than 0",
+		}
+	}
+
+	// no validation rules for Enable
+
+	return nil
+}
+
+// SetStatusReqValidationError is the validation error returned by
+// SetStatusReq.Validate if the designated constraints aren't met.
+type SetStatusReqValidationError struct {
+	field  string
+	reason string
+	cause  error
+	key    bool
+}
+
+// Field function returns field value.
+func (e SetStatusReqValidationError) Field() string { return e.field }
+
+// Reason function returns reason value.
+func (e SetStatusReqValidationError) Reason() string { return e.reason }
+
+// Cause function returns cause value.
+func (e SetStatusReqValidationError) Cause() error { return e.cause }
+
+// Key function returns key value.
+func (e SetStatusReqValidationError) Key() bool { return e.key }
+
+// ErrorName returns error name.
+func (e SetStatusReqValidationError) ErrorName() string { return "SetStatusReqValidationError" }
+
+// Error satisfies the builtin error interface
+func (e SetStatusReqValidationError) Error() string {
+	cause := ""
+	if e.cause != nil {
+		cause = fmt.Sprintf(" | caused by: %v", e.cause)
+	}
+
+	key := ""
+	if e.key {
+		key = "key for "
+	}
+
+	return fmt.Sprintf(
+		"invalid %sSetStatusReq.%s: %s%s",
+		key,
+		e.field,
+		e.reason,
+		cause)
+}
+
+var _ error = SetStatusReqValidationError{}
+
+var _ interface {
+	Field() string
+	Reason() string
+	Key() bool
+	Cause() error
+	ErrorName() string
+} = SetStatusReqValidationError{}
 
 // Validate checks the field values on DelRoleReq with the rules defined in the
 // proto definition for this message. If any rules are violated, an error is returned.

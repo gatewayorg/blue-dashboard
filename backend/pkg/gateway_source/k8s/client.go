@@ -62,16 +62,13 @@ func (c *Client) Watch() (addrsChan <-chan []string) {
 			if err != nil {
 				continue
 			}
-			break
-		}
-
-		defer watchInterface.Stop()
-		for e := range watchInterface.ResultChan() {
-			endpoints, ok := e.Object.(*v1.Endpoints)
-			if ok && endpoints.Name == c.name {
-				addrs := c.getAddrs(endpoints)
-				if len(addrs) != 0 {
-					watchChan <- addrs
+			for e := range watchInterface.ResultChan() {
+				endpoints, ok := e.Object.(*v1.Endpoints)
+				if ok && endpoints.Name == c.name {
+					addrs := c.getAddrs(endpoints)
+					if len(addrs) != 0 {
+						watchChan <- addrs
+					}
 				}
 			}
 		}

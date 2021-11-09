@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue-dashboard-deploy
+  labels:
+    deploy: blue-dashboard-deploy
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: blue-dashboard-pod
+  template:
+    metadata:
+      labels:
+        app: blue-dashboard-pod
+    spec:
+      serviceAccount: "blue-dashboard"
+      containers:
+        - name: dashboard
+          image: "jinmz/blue-dashboard:v0.2"
+          imagePullPolicy: Always
+          args:
+            - /server
+            - --dsn
+            - "root:123@tcp(mysql-svc:3306)/dashboard?charset=utf8mb4&parseTime=True"
+            - --gateway_namespace
+            - "kube-system"
+            - --gateway_service
+            - "blue-gw-svc"
+            - --jwt_key
+            - "@dsa1das()=1dsa921#dsa.,da#1sdad34"
+            - --init_username
+            - "admin"
+            - --init_password
+            - "admin123"
+          ports:
+            - name: backend
+              containerPort: 8081
+              protocol: TCP
+            - name: front
+              containerPort: 80
+              protocol: TCP
+
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 1024Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blue-dashboard-svc
+spec:
+  type: NodePort
+  ports:
+    - name: backend
+      port: 8081
+      targetPort: backend
+      nodePort: 30081
+      protocol: TCP
+    - name: front
+      port: 80
+      nodePort: 30080
+      targetPort: front
+      protocol: TCP
+
+  selector:
+    app: blue-dashboard-pod

@@ -12,12 +12,14 @@ message Role {
     string detail = 3;
     google.protobuf.Timestamp create_time = 4;
     bool enable = 5;
+    repeated uint64 rule_ids = 6;
 }
 
 message Rule {
     uint64  id = 1;
-    string method = 2;
-    string path = 3;
+    string service = 2;
+    string method = 3;
+    string detail = 4;
 }
 
 message RoleRule {

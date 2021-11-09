@@ -8,30 +8,143 @@ import "user/common.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "validate/validate.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+    schemes : HTTP
+    host: "127.0.0.1:8081"
+    security_definitions : {
+        security : {
+            key: "ApiKeyHeader"
+            value : {
+                type: TYPE_API_KEY
+                in: IN_HEADER
+                name: "Authorization"
+            };
+        }
+    }
+};
 
 service PublicUser {
-    rpc Login(LoginReq) returns(google.protobuf.Empty) {
+    rpc Login(LoginReq) returns(LoginResp) {
         option (google.api.http) = {
             post: "/user/login"
             body: "*"
         };
     }
-    rpc SelectRole(SelectRoleReq) returns(google.protobuf.Empty) {
-        option (google.api.http) = {
-            post: "/user/select/role"
-            body: "*"
-        };
-    }
-    rpc GetList(google.protobuf.Empty) returns(GetListResp) {
+
+    rpc GetList(GetListReq) returns(GetListResp) {
         option (google.api.http) = {
             get: "/user/list"
+        };
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+            security : {
+                security_requirement : {
+                    key : "ApiKeyHeader"
+                    value : {}
+                }
+            }
+        };
+    }
+
+    rpc Add(AddReq) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/user/add"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+            security : {
+                security_requirement : {
+                    key : "ApiKeyHeader"
+                    value : {}
+                }
+            }
+        };
+    }
+
+    rpc Update(UpdateReq) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            put: "/user"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+            security : {
+                security_requirement : {
+                    key : "ApiKeyHeader"
+                    value : {}
+                }
+            }
+        };
+    }
+
+    rpc UpdatePwd(UpdatePwdReq) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            patch: "/user/pwd"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+            security : {
+                security_requirement : {
+                    key : "ApiKeyHeader"
+                    value : {}
+                }
+            }
+        };
+    }
+
+    rpc SetStatus(SetStatusReq) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            patch: "/user/status"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+            security : {
+                security_requirement : {
+                    key : "ApiKeyHeader"
+                    value : {}
+                }
+            }
+        };
+    }
+
+    rpc SelectRole(SelectRoleReq) returns(google.protobuf.Empty) {
+        option (google.api.http) = {
+            patch: "/user/select/role"
+            body: "*"
+        };
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+            security : {
+                security_requirement : {
+                    key : "ApiKeyHeader"
+                    value : {}
+                }
+            }
+        };
+    }
+
+    rpc Delete(DeleteReq) returns(google.protobuf.Empty) {
+        option (google.api.http) = {
+            delete: "/user/del"
+        };
+        option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+            security : {
+                security_requirement : {
+                    key : "ApiKeyHeader"
+                    value : {}
+                }
+            }
         };
     }
 }
 
+
 message LoginReq {
-    string username = 1;
-    string passwd = 2;
+    string username = 1 [(validate.rules).string = {min_len: 1, max_len: 255}];
+    string password = 2 [(validate.rules).string = {min_len: 1, max_len: 255}];
+}
+
+message LoginResp {
+    string access_token = 1;
 }
 
 message SelectRoleReq {
@@ -39,10 +152,44 @@ message SelectRoleReq {
     uint64 role_id = 2 [(validate.rules).uint64.gt = 0];
 }
 
-message GetListResp {
-    repeated dashboard.user.user data = 1;
+message GetListReq {
+    uint64 page = 1 [(validate.rules).uint64.gt = 0];
+    uint64 page_size = 2 [(validate.rules).uint64.gt = 0];
 }
 
+message GetListResp {
+    uint64 total = 1;
+    repeated dashboard.user.user data = 2;
+}
+
+message AddReq {
+    string username = 1 [(validate.rules).string = {min_len: 1, max_len: 255}];
+    string passwd = 2 [(validate.rules).string = {min_len: 1, max_len: 255}];
+    string name = 3 [(validate.rules).string = {min_len: 1, max_len: 255}];
+    uint64 role_id = 4 [(validate.rules).uint64.gt = 0];
+    bool enable = 5;
+}
+
+message UpdateReq {
+    uint64 id = 1 [(validate.rules).uint64.gt = 0];
+    string name = 2 [(validate.rules).string = {min_len: 1, max_len: 255}];
+    uint64 role_id = 3 [(validate.rules).uint64.gt = 0];
+    bool enable = 4;
+}
+
+message UpdatePwdReq {
+    string old_passwd = 1;
+    string new_passwd = 2;
+}
+
+message SetStatusReq {
+    uint64 id = 1 [(validate.rules).uint64.gt = 0];
+    bool enable = 2;
+}
+
+message DeleteReq {
+    uint64 id = 1 [(validate.rules).uint64.gt = 0];
+}
 
 
 

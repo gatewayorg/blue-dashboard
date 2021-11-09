@@ -6,7 +6,6 @@ import (
 	"github.com/gatewayorg/blue-dashboard/api/protos/index"
 	"github.com/gatewayorg/blue-dashboard/internal/model"
 	"github.com/gatewayorg/blue-dashboard/internal/service"
-	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -28,8 +27,8 @@ func (p *PublicIndex) Index(ctx context.Context, req *index.IndexReq) (*index.In
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "internal error")
 	}
-	log.Info("gatewatMetrics", zap.Any("data", gatewayMetrics))
-	log.Info("gatewayMetricsStatus", zap.Any("data", gatewayMetricsStatus))
+	//log.Info("gatewatMetrics", zap.Any("data", gatewayMetrics))
+	//log.Info("gatewayMetricsStatus", zap.Any("data", gatewayMetricsStatus))
 
 	return &index.IndexResp{Data: gatewayMetricsToPb(gatewayMetrics, gatewayMetricsStatus)}, nil
 }
@@ -75,23 +74,25 @@ func gatewayMetricsToPb(data []*model.GatewayMetrics, status []*model.GatewayMet
 	for _, info := range status {
 		reqTotal := &index.RequestTotal{}
 		cacheTotal := &index.CacheTotal{}
-		for _, serverZones := range info.ServerZones {
-			reqTotal.InBytes += serverZones.InBytes
-			reqTotal.OutBytes += serverZones.OutBytes
-			reqTotal.X1Xx += serverZones.Responses.OneXx
-			reqTotal.X2Xx += serverZones.Responses.TwoXx
-			reqTotal.X3Xx += serverZones.Responses.ThreeXx
-			reqTotal.X4Xx += serverZones.Responses.FourXx
-			reqTotal.X5Xx += serverZones.Responses.FiveXx
+		if info.Metrics != nil {
+			for _, serverZones := range info.ServerZones {
+				reqTotal.InBytes += serverZones.InBytes
+				reqTotal.OutBytes += serverZones.OutBytes
+				reqTotal.X1Xx += serverZones.Responses.OneXx
+				reqTotal.X2Xx += serverZones.Responses.TwoXx
+				reqTotal.X3Xx += serverZones.Responses.ThreeXx
+				reqTotal.X4Xx += serverZones.Responses.FourXx
+				reqTotal.X5Xx += serverZones.Responses.FiveXx
 
-			cacheTotal.Miss += serverZones.Responses.Miss
-			cacheTotal.Bypass += serverZones.Responses.Bypass
-			cacheTotal.Expired += serverZones.Responses.Expired
-			cacheTotal.Stale += serverZones.Responses.Stale
-			cacheTotal.Updating += serverZones.Responses.Updating
-			cacheTotal.Revalidated += serverZones.Responses.Revalidated
-			cacheTotal.Hit += serverZones.Responses.Hit
-			cacheTotal.Scarce += serverZones.Responses.Scarce
+				cacheTotal.Miss += serverZones.Responses.Miss
+				cacheTotal.Bypass += serverZones.Responses.Bypass
+				cacheTotal.Expired += serverZones.Responses.Expired
+				cacheTotal.Stale += serverZones.Responses.Stale
+				cacheTotal.Updating += serverZones.Responses.Updating
+				cacheTotal.Revalidated += serverZones.Responses.Revalidated
+				cacheTotal.Hit += serverZones.Responses.Hit
+				cacheTotal.Scarce += serverZones.Responses.Scarce
+			}
 		}
 
 		res = append(res, &index.GatewayInfo{

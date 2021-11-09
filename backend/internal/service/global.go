@@ -6,7 +6,11 @@ import (
 	"time"
 )
 
-var MetricsSvc Metrics
+var (
+	MetricsSvc Metrics
+	RbacSvc    Rbac
+	UserSvc    User
+)
 
 type Source string
 
@@ -24,6 +28,8 @@ type Config struct {
 
 func GlobalInitWithConfig(conf *Config) {
 	MetricsSvc = NewMetrics(conf, repository.GatewayRepo)
+	RbacSvc = NewRbac(repository.RbacRepo, repository.UserRepo)
+	UserSvc = NewUser(repository.UserRepo, repository.RbacRepo)
 
 	go MetricsSvc.WatchMetrics(context.Background())
 }
