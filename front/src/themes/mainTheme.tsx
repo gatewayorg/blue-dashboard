@@ -77,7 +77,7 @@ const mainTheme = createTheme({
         border: '1px solid #919191',
         height: 40,
         borderRadius: 5,
-        margin: '24px 0 8px 0',
+        margin: ' 0',
       },
       input: {
         padding: 0,

@@ -8,10 +8,11 @@ import {
 import { Layout } from '../../components/Layout/Layout';
 import { StatusCodeCount } from "./statusCodeCountChart";
 import { RequestTotalCharts } from "./requestTotalCharts"
-import { client } from '../../api/service';
+import { authClient } from '../../api/service';
 import { useInitEffect } from '../../hooks/useInitEffect';
 import { CacheTotalCharts } from "./cacheTotalCharts";
 import { SharedMemoryChart } from "./sharedMemoryChart"
+import { useSnackbar } from 'notistack';
 
 const styles = (theme: Theme): StyleRules => ({
   root:{
@@ -158,9 +159,10 @@ const HomeComponent = ({
   classes = {},
 }: IHomeProps) => {
   const [dataInfo, setDataInfo] = React.useState<IDataInfo[]>();
+  const { enqueueSnackbar } = useSnackbar();
 
   useInitEffect(() => {
-    client.get(`/api/index?start=${parseInt((new Date().getTime()/1000 - 30*60).toString())}&end=${parseInt((new Date().getTime()/1000).toString())}`)
+    authClient.get(`/api/index?start=${parseInt((new Date().getTime()/1000 - 30*60).toString())}&end=${parseInt((new Date().getTime()/1000).toString())}`)
       .then(res => {
         if (res.status === 200) {
           const data = res.data.data;
@@ -218,7 +220,17 @@ const HomeComponent = ({
             return '';
           })
           setDataInfo([newData]);
+        } else {
+          enqueueSnackbar(res.data.message, { 
+            variant: 'error',
+            autoHideDuration: 3000,
+        });
         }
+      }).catch(err => {
+        enqueueSnackbar(err.response.data.message||"Error", { 
+          variant: 'error',
+          autoHideDuration: 3000,
+      });
       })
   })
   return (
