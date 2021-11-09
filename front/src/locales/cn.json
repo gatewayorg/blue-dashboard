@@ -4,8 +4,102 @@
     },
     "header": {
         "home": "Dashboard",
-        "buy": "购买Token",
-        "farming": "Farming",
-        "my": "My"
+        "my": "User",
+        "info": "User Info",
+        "rule": "User Rule",
+        "role": "User Role"
+    },
+    "user-info": {
+        "header": {
+            "id": "Id",
+            "username": "Username",
+            "enable": "Enable",
+            "name": "Name",
+            "role": "Role",
+            "create-time": "Create Time",
+            "role-create-time": "Role Create Time:",
+            "role-detail": "Role Detail:",
+            "role-enable": "Role Enable:",
+            "role-id": "Role Id:",
+            "role-name": "Role Name",
+            "operating": "Operating:",
+            "change": "Change Role",
+            "add": "Add User",
+            "delete": "Delete User",
+            "password": "Change Password",
+            "user": "Change User"
+        },
+        "dialog": {
+            "changeRole": {
+                "title": "Change Role",
+                "role": "Role:",
+                "cancel": "Cancel",
+                "submit": "Submit"
+            },
+            "addUser": {
+                "title": "Add User",
+                "name": "Name:",
+                "role": "Role:",
+                "username": "Username:",
+                "enable": "Enable:",
+                "password": "Password:"
+            },
+            "changePassword": {
+                "title": "Change Password",
+                "oldPassword": "Old Password:",
+                "newPassword": "New Password"
+            }
+        }
+    },
+    "user-rule": {
+        "header": {
+            "id": "Id",
+            "method": "Method",
+            "detail": "Detail",
+            "service": "Service",
+            "set": "Set Rule Detail",
+            "delete": "Delete Rule",
+            "operating": "Operating"
+        },
+        "dialog": {
+            "title": "Set Rule Detail",
+            "detail": "Detail:"
+        }
+    },
+    "user-role": {
+        "header": {
+            "id": "Id",
+            "name": "Name",
+            "enable": "Enable",
+            "detail": "Detail",
+            "create-time": "Create Time",
+            "rule_ids": "Rule Ids",
+            "add": "Add Role",
+            "delete": "Delete Role",
+            "update": "Update Role",
+            "set": "Set Rule"
+        },
+        "dialog": {
+            "title": "Add Role",
+            "update": "Update Role",
+            "set": "Set Rule",
+            "role": "Role (Multiple):",
+            "name": "Name:",
+            "enable": "Enable:",
+            "detail": "Detail:"
+        }
+    },
+    "login": {
+        "title": "Welcome",
+        "username": "Username",
+        "password": "Password",
+        "usernames": "Username:",
+        "passwords": "Password:",
+        "btn": "Log in"
+    },
+    "pagination": {
+        "jump-to": "Jump To",
+        "page": "Page"
     }
+
 }

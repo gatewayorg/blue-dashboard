@@ -1,16 +1,10 @@
 export const PATH = {
   DASHBOARD: '/',
-  // SETTING: {
-  //   AccountSettinng: '/setting',
-  // },
-  BUYTOKEN:{
-    Buy: '/buy',
-  },
-  FARMING:{
-    Farming:'/farming'
-  },
+  LOGIN: '/login',
   MY:{
-    My:'/my'
+    My:'/user',
+    Rule:'/rule',
+    Role:'/role'
   }
 }
 

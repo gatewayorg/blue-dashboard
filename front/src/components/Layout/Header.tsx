@@ -7,7 +7,7 @@ import {
   withStyles
 } from '@material-ui/core';
 import { useInitEffect } from '../../hooks/useInitEffect';
-import { ReactComponent as Logo } from '../../assets/logo.svg';
+// import { ReactComponent as Logo } from '../../assets/logo.svg';
 import { PATH } from '../../nav/const';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -18,9 +18,12 @@ const styles = (theme: Theme): StyleRules => ({
     backgroundColor: '#000',  
     padding:'0 60px',
   },
+  logo:{
+    height:40,
+  },
   headers:{
     width: '100%',
-    height: theme.spacing(12.5),
+    height: theme.spacing(10),
     margin:'0 auto',
     display:'flex',
     alignItems:'center',
@@ -35,13 +38,51 @@ const styles = (theme: Theme): StyleRules => ({
     padding:'0 30px',
     height:'100%',
     display:'block',
-    lineHeight:'100px',
+    lineHeight:'80px',
     textDecoration:'none',
     fontFamily: 'Noto Sans S Chinese',
     fontStyle: 'normal',
     fontWeight:500,
     fontSize:'16px',
-    color:'rgba(255, 255, 255, 0.5)'
+    color:'rgba(255, 255, 255, 0.5)',
+    '&&:hover': {
+      color:'rgba(255, 255, 255, 0.9)',
+    }
+  },
+  content:{
+    margin:'0 30px',
+    height:'100%',
+    display:'block',
+    lineHeight:'80px',
+    textDecoration:'none',
+    fontFamily: 'Noto Sans S Chinese',
+    fontStyle: 'normal',
+    fontWeight:500,
+    fontSize:'16px',
+    color:'rgba(255, 255, 255, 0.5)',
+    cursor:'pointer',
+    position:'relative',
+    '&:hover $contentRoute': {
+      display:'block',
+    }
+  },
+  contentRoute:{
+    padding:'0 30px',
+    height:'44px',
+    lineHeight:'44px',
+    textDecoration:'none',
+    fontFamily: 'Noto Sans S Chinese',
+    fontStyle: 'normal',
+    fontWeight:500,
+    fontSize:'16px',
+    color:'rgba(255, 255, 255, 0.5)',
+    backgroundColor:'#000',
+    marginLeft:'-30px',
+    '&&:hover': {
+      color:'rgba(255, 255, 255, 0.9)',
+    },
+    display:'none',
+    whiteSpace:"nowrap",
   }
 });
 
@@ -67,21 +108,26 @@ const HeaderComponent = ({
     <div className={classes.root}>
       <div className={classes.headers}>
           <RouterLink to={PATH.DASHBOARD}>
-            <Logo className={classes.logo} />
+            {/* <Logo className={classes.logo} /> */}
           </RouterLink>
           <div className={classes.link}>
             <RouterLink to={PATH.DASHBOARD} className={classes.route}>
               {t('header.home')}
             </RouterLink>
-            {/* <RouterLink to={PATH.BUYTOKEN.Buy} className={classes.route}>
-              {t('header.buy')}
-            </RouterLink>
-            <RouterLink to={PATH.FARMING.Farming} className={classes.route}>
-              {t('header.farming')}
-            </RouterLink>
-            <RouterLink to={PATH.MY.My} className={classes.route}>
+            <div className={classes.content}>
               {t('header.my')}
-            </RouterLink> */}
+              <div>
+                <RouterLink to={PATH.MY.My} className={classes.contentRoute}>
+                  {t('header.info')}
+                </RouterLink>
+                <RouterLink to={PATH.MY.Rule} className={classes.contentRoute}>
+                  {t('header.rule')}
+                </RouterLink>
+                <RouterLink to={PATH.MY.Role} className={classes.contentRoute}>
+                  {t('header.role')}
+                </RouterLink>
+              </div>
+            </div> 
           </div>
           <div>
             {/* <p>123</p> */}
