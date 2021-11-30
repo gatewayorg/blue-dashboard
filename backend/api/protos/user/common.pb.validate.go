@@ -47,29 +47,25 @@ func (m *User) Validate() error {
 
 	// no validation rules for Username
 
-	// no validation rules for AliasName
-
-	if v, ok := interface{}(m.GetRoleId()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return UserValidationError{
-				field:  "RoleId",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
-
-	if v, ok := interface{}(m.GetCreateTime()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return UserValidationError{
-				field:  "CreateTime",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
-	}
+	// no validation rules for Name
 
 	// no validation rules for Enable
+
+	if v, ok := interface{}(m.GetCreateAt()).(interface{ Validate() error }); ok {
+		if err := v.Validate(); err != nil {
+			return UserValidationError{
+				field:  "CreateAt",
+				reason: "embedded message failed validation",
+				cause:  err,
+			}
+		}
+	}
+
+	// no validation rules for RoleId
+
+	// no validation rules for RoleName
+
+	// no validation rules for RoleDetail
 
 	return nil
 }

@@ -8,11 +8,35 @@ import "rbac/common.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 import "validate/validate.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  schemes : HTTP
+  host: "127.0.0.1:8081"
+  security_definitions : {
+    security : {
+      key: "ApiKeyHeader"
+      value : {
+        type: TYPE_API_KEY
+        in: IN_HEADER
+        name: "Authorization"
+      };
+    }
+  }
+};
 
 service PublicRole {
-  rpc GetList(google.protobuf.Empty) returns (GetListResp) {
+  rpc GetRole(GetRoleReq) returns (GetRoleResp) {
     option (google.api.http) = {
-      get : "/rbac/role"
+      get : "/rbac/role/list"
+    };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      security : {
+        security_requirement : {
+          key : "ApiKeyHeader"
+          value : {}
+        }
+      }
     };
   }
 
@@ -21,6 +45,14 @@ service PublicRole {
       post : "/rbac/role"
       body: "*"
     };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      security : {
+        security_requirement : {
+          key : "ApiKeyHeader"
+          value : {}
+        }
+      }
+    };
   }
 
   rpc Update(UpdateRoleReq) returns(google.protobuf.Empty) {
@@ -28,11 +60,42 @@ service PublicRole {
       put : "/rbac/role"
       body: "*"
     };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      security : {
+        security_requirement : {
+          key : "ApiKeyHeader"
+          value : {}
+        }
+      }
+    };
+  }
+
+  rpc SetStatus(SetStatusReq) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      patch : "/rbac/role/status"
+      body: "*"
+    };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      security : {
+        security_requirement : {
+          key : "ApiKeyHeader"
+          value : {}
+        }
+      }
+    };
   }
 
   rpc Del(DelRoleReq) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       delete : "/rbac/role"
+    };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      security : {
+        security_requirement : {
+          key : "ApiKeyHeader"
+          value : {}
+        }
+      }
     };
   }
 
@@ -41,25 +104,45 @@ service PublicRole {
       post : "/rbac/role/rule"
       body: "*"
     };
+    option (grpc.gateway.protoc_gen_swagger.options.openapiv2_operation) = {
+      security : {
+        security_requirement : {
+          key : "ApiKeyHeader"
+          value : {}
+        }
+      }
+    };
   }
 }
 
+message GetRoleReq {
+    uint64 page = 1 [(validate.rules).uint64.gt = 0];
+    uint64 page_size = 2 [(validate.rules).uint64.gt = 0];
+}
 
-message GetListResp {
-    repeated dashboard.rbac.Role data = 1;
+
+message GetRoleResp {
+    uint64 total = 1;
+    repeated dashboard.rbac.Role data = 2;
 }
 
 message AddRoleReq {
-    string name = 1[(validate.rules).string.min_len = 1];
-    string detail = 2[(validate.rules).string.min_len = 1];
+    string name = 1 [(validate.rules).string = {min_len: 1, max_len: 255}];
+    string detail = 2 [(validate.rules).string = {min_len: 1, max_len: 255}];
     bool enable = 3;
 }
 
 message UpdateRoleReq {
-    uint64 id = 1[(validate.rules).uint64.gt = 0];
-    string name = 2[(validate.rules).string.min_len = 1];
-    string detail = 3[(validate.rules).string.min_len = 1];
+    uint64 id = 1 [(validate.rules).uint64.gt = 0];
+    string name = 2 [(validate.rules).string = {min_len: 1, max_len: 255}];
+    string detail = 3 [(validate.rules).string = {min_len: 1, max_len: 255}];
     bool enable = 4;
+}
+
+message SetStatusReq {
+    uint64 id = 1[(validate.rules).uint64.gt = 0];
+    bool enable = 2;
+
 }
 
 message DelRoleReq {
