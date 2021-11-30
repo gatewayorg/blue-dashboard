@@ -22,7 +22,11 @@ const styles = (theme: Theme): StyleRules => ({
     display:"flex",
     margin:"20px 20px",
     borderRadius:"10px",
-    overflow:'hidden'
+    overflow:'hidden',
+    [theme.breakpoints.down("xs")]: {
+      flexFlow:"column",
+      marginRight:"0px",
+    }
   },
   errorCount:{
     backgroundColor:'#282c34',
@@ -35,6 +39,12 @@ const styles = (theme: Theme): StyleRules => ({
     '&:first-child': {
       marginLeft:'0'
     },
+    [theme.breakpoints.down("xs")]: {
+      width:"100%",
+      marginLeft:'0',
+      marginTop:'10px',
+      height:100,
+    }
   },
   requestCount:{
     backgroundColor:'#282c34',
@@ -44,6 +54,11 @@ const styles = (theme: Theme): StyleRules => ({
     height:300,
     textAlign:'center',
     border: '1px solid rgba(256,256,256,0.1)',
+    [theme.breakpoints.down("xs")]: {
+      width:"100%",
+      marginLeft:'0',
+      marginTop:'10px',
+    }
   },
   countTitle:{
     fontWeight:600,
@@ -62,12 +77,17 @@ const styles = (theme: Theme): StyleRules => ({
     margin:0,
     fontWeight:500,
     lineHeight:'200px',
+    [theme.breakpoints.down("xs")]: {
+      lineHeight:'40px',
+    }
   },
   statusCodeCount:{
     width:"calc(100% - 20px)",
     border: '1px solid rgba(256,256,256,0.2)',
     borderRadius:"8px",
-
+    [theme.breakpoints.down("xs")]: {
+      width:"100%",
+    }
   },
   requestTotalContent:{
     height:250,
@@ -78,7 +98,12 @@ const styles = (theme: Theme): StyleRules => ({
   cacheTotal:{
     width: 'calc(50% - 50px)',
     marginLeft:"10px",
-    overflow:"hidden"
+    overflow:"hidden",
+    [theme.breakpoints.down("xs")]: {
+      width: '100%',
+      marginLeft:"0",
+      marginTop:'10px',
+    }
   },
   chartContent:{
     height:'252px'
@@ -92,6 +117,11 @@ const styles = (theme: Theme): StyleRules => ({
     '&:first-child': {
       marginLeft:'0'
     },
+    [theme.breakpoints.down("xs")]: {
+      width:"100%",
+      marginLeft:'0',
+      marginTop:'10px',
+    }
   },
   hostDetail:{
     color:'#099639',

@@ -17,4 +17,7 @@
 # dependencies
 node_modules
 dist
-build
+front/node_modules
+front/package-lock.json
+front/build
+backend/build
