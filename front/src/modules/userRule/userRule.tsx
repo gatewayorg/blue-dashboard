@@ -20,10 +20,19 @@ import{  SetRuleDialog,ISetRuleValue } from './SetRuleDialog/SetRuleDialog'
 import { useSnackbar } from 'notistack';
 import { Pagination } from '../../common/Pagination'
 import { ITEMS_PER_PAGE } from "../const"
+import { useIsXSDown } from "../../hooks/themeHooks";
 
 const styles = (theme: Theme): StyleRules => ({
   root:{
-    padding:'20px'
+    padding:'20px',
+    [theme.breakpoints.down("xs")]: {
+      padding:'0'
+    },
+    '& .MuiTableCell-root':{
+      [theme.breakpoints.down("xs")]: {
+        padding:'10px 2px'
+      }
+    },
   },
   buttons: {
     marginRight: 10,
@@ -59,6 +68,7 @@ const UserRuleComponent = ({
   const { enqueueSnackbar } = useSnackbar();
   const [total, setTotal] = React.useState(0);
   const [page, setPage] = React.useState(0);
+  const isXSDown = useIsXSDown();
 
   const query= useCallback((page:number) => {
     authClient.get(`/api/rbac/rule/list?page=${page+1}&page_size=${ITEMS_PER_PAGE}`)
@@ -121,10 +131,10 @@ const UserRuleComponent = ({
       <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{t("user-rule.header.id")}</TableCell>
+            {!isXSDown && <TableCell>{t("user-rule.header.id")}</TableCell>}
               <TableCell>{t("user-rule.header.method")}</TableCell>
               <TableCell>{t("user-rule.header.service")}</TableCell>
-              <TableCell>{t("user-rule.header.detail")}</TableCell>
+              {!isXSDown && <TableCell>{t("user-rule.header.detail")}</TableCell>}
               <TableCell>{t("user-rule.header.operating")}</TableCell>
             </TableRow>
           </TableHead>

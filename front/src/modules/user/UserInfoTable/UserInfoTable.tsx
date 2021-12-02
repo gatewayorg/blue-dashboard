@@ -14,7 +14,7 @@ import { IDataInfo } from '../userList';
 import { authClient } from '../../../api/service';
 import { NewSwitch } from "../../../common/Switch/NewSwitch"
 import { useSnackbar } from 'notistack';
-
+import { useIsXSDown } from "../../../hooks/themeHooks";
 interface IAppsTableRowProps extends StyledComponentProps {
   theme: Theme;
   datadetail: IDataInfo;
@@ -40,6 +40,7 @@ const UserInfoTableComponent = ({
   setUserStatus,
 }: IAppsTableRowProps) => {
   const { enqueueSnackbar } = useSnackbar();
+  const isXSDown = useIsXSDown();
   const changeStatus = () => {
     setOpen(true);
     setUserSelect(datadetail);
@@ -102,14 +103,12 @@ const UserInfoTableComponent = ({
     <>
       <TableRow
         key={datadetail.id}
-        hover
-        style={{ cursor: "pointer" }}
       >
-        <TableCell>{datadetail.id}</TableCell>
+        {!isXSDown && <TableCell>{datadetail.id}</TableCell>}
         <TableCell>{datadetail.name}</TableCell>
         <TableCell><NewSwitch checked={datadetail.enable} onChange={handleChange}/></TableCell>
-        <TableCell>{datadetail.create_at}</TableCell>
-        <TableCell>{datadetail.username}</TableCell>
+        {!isXSDown && <TableCell>{datadetail.create_at}</TableCell>}
+        {!isXSDown && <TableCell>{datadetail.username}</TableCell>}
         <TableCell>{datadetail.role_name}</TableCell>
         <TableCell>
           <Button onClick={deleteRole} className={classes.buttons}>

@@ -25,7 +25,8 @@ const styles = (theme: Theme): StyleRules => ({
     overflow:'hidden',
     [theme.breakpoints.down("xs")]: {
       flexFlow:"column",
-      marginRight:"0px",
+      margin:"0px",
+      marginTop:"10px",
     }
   },
   errorCount:{

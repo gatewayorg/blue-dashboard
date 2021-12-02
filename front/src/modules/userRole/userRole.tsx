@@ -23,10 +23,19 @@ import { SetRuleDialog } from './SetRuleDialog/SetRuleDialog'
 import { useSnackbar } from 'notistack';
 import { Pagination } from '../../common/Pagination'
 import { ITEMS_PER_PAGE } from "../const"
+import { useIsXSDown } from "../../hooks/themeHooks";
 
 const styles = (theme: Theme): StyleRules => ({
   root:{
-    padding:'20px'
+    padding:'20px',
+    [theme.breakpoints.down("xs")]: {
+      padding:'0'
+    },
+    '& .MuiTableCell-root':{
+      [theme.breakpoints.down("xs")]: {
+        padding:'10px'
+      }
+    },
   },
   buttons: {
     marginRight: 10,
@@ -74,7 +83,7 @@ const UserRoleComponent = ({
   const [selectedRoles, setSelectedRoles] = React.useState<string[]>([""]);
   const [total, setTotal] = React.useState(0);
   const [page, setPage] = React.useState(0);
-
+  const isXSDown = useIsXSDown();
   const { enqueueSnackbar } = useSnackbar();
   const query= useCallback((page:number) => {
     authClient.get(`/api/rbac/role/list?page=${page+1}&page_size=${ITEMS_PER_PAGE}`)
@@ -202,8 +211,8 @@ const UserRoleComponent = ({
               <TableCell>{t("user-role.header.id")}</TableCell>
               <TableCell>{t("user-role.header.name")}</TableCell>
               <TableCell>{t("user-role.header.enable")}</TableCell>
-              <TableCell>{t("user-role.header.create-time")}</TableCell>
-              <TableCell>{t("user-role.header.detail")}</TableCell>
+              {!isXSDown && <TableCell>{t("user-role.header.create-time")}</TableCell>}
+              {!isXSDown &&<TableCell>{t("user-role.header.detail")}</TableCell>}
               <TableCell>{t("user-rule.header.operating")}</TableCell>
             </TableRow>
           </TableHead>

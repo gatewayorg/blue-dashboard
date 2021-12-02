@@ -17,6 +17,9 @@ const styles = (theme: Theme): StyleRules => ({
     width: '100%', 
     backgroundColor: '#000',  
     padding:'0 60px',
+    [theme.breakpoints.down("xs")]: {
+      padding:'0 30px',
+    }
   },
   logo:{
     height:40,
