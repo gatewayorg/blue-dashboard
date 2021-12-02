@@ -11,6 +11,7 @@ import withTheme from "@material-ui/core/styles/withTheme";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { UserInfoTableStyle } from "./UserRoleTableStyle";
 import { IDataInfo } from '../userRule';
+import { useIsXSDown } from "../../../hooks/themeHooks";
 
 interface IAppsTableRowProps extends StyledComponentProps {
   theme: Theme;
@@ -27,7 +28,7 @@ const UserRoleTableComponent = ({
   setUserSelect,
   setOpen,
 }: IAppsTableRowProps) => {
-
+  const isXSDown = useIsXSDown();
   const setRule  = ()=>{
     setOpen(true);
     setUserSelect(datadetail);
@@ -37,13 +38,11 @@ const UserRoleTableComponent = ({
     <>
       <TableRow
         key={datadetail.id}
-        hover
-        style={{ cursor: "pointer" }}
       >
-        <TableCell>{datadetail.id}</TableCell>
+        {!isXSDown && <TableCell>{datadetail.id}</TableCell>}
         <TableCell>{datadetail.method}</TableCell>
         <TableCell>{datadetail.service}</TableCell>
-        <TableCell>{datadetail.detail}</TableCell>
+        {!isXSDown && <TableCell>{datadetail.detail}</TableCell>}
         <TableCell>
         <Button onClick={setRule} className={classes.buttons}>
           {t("user-rule.header.set")}

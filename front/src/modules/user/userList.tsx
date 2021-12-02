@@ -24,10 +24,19 @@ import {ChangeUserDialog,IChangeUserValue} from './ChangeUserDialog/ChangeUserDi
 import { useSnackbar } from 'notistack';
 import { Pagination } from '../../common/Pagination'
 import { ITEMS_PER_PAGE } from "../const"
+import { useIsXSDown } from "../../hooks/themeHooks";
 
 const styles = (theme: Theme): StyleRules => ({
   root:{
-    padding:'20px'
+    padding:'20px',
+    [theme.breakpoints.down("xs")]: {
+      padding:'0'
+    },
+    '& .MuiTableCell-root':{
+      [theme.breakpoints.down("xs")]: {
+        padding:'10px'
+      }
+    },
   },
   buttons: {
     marginRight: 10,
@@ -79,6 +88,7 @@ const UserListComponent = ({
   const [userNames, setUserNames] = React.useState("");
   const [total, setTotal] = React.useState(0);
   const [page, setPage] = React.useState(0);
+  const isXSDown = useIsXSDown();
 
   const query= useCallback((page:number) => {
     authClient.get(`/api/user/list?page=${page+1}&page_size=${ITEMS_PER_PAGE}`)
@@ -229,11 +239,11 @@ const UserListComponent = ({
       <Table>
           <TableHead>
             <TableRow>
-              <TableCell>{t("user-info.header.id")}</TableCell>
+            {!isXSDown && <TableCell>{t("user-info.header.id")}</TableCell>}
               <TableCell>{t("user-info.header.name")}</TableCell>
               <TableCell>{t("user-info.header.enable")}</TableCell>
-              <TableCell>{t("user-info.header.create-time")}</TableCell>
-              <TableCell>{t("user-info.header.username")}</TableCell>
+              {!isXSDown && <TableCell>{t("user-info.header.create-time")}</TableCell>}
+              {!isXSDown && <TableCell>{t("user-info.header.username")}</TableCell>}
               <TableCell>{t("user-info.header.role-name")}</TableCell>
               <TableCell>{t("user-info.header.operating")}</TableCell>
             </TableRow>

@@ -10,11 +10,9 @@ import { Header } from './Header';
 const styles = (theme: Theme): StyleRules => ({
   root: {
     width: '100%',
-    // maxWidth: theme.spacing(160),
-    // padding: theme.spacing(0, 8),
     margin: '0 auto',
     '@media (max-width: 769px)':{
-      padding: theme.spacing(0, 3, 4),
+      padding: theme.spacing(0, 2, 4),
       overflowY:'scroll',
       overflowX:"hidden",
     }

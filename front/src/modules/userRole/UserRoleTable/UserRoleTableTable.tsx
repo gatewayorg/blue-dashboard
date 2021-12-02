@@ -14,7 +14,7 @@ import { IDataInfo } from '../userRole';
 import { authClient } from '../../../api/service';
 import { NewSwitch } from "../../../common/Switch/NewSwitch"
 import { useSnackbar } from 'notistack';
-
+import { useIsXSDown } from "../../../hooks/themeHooks";
 interface IAppsTableRowProps extends StyledComponentProps {
   theme: Theme;
   datadetail: IDataInfo;
@@ -36,6 +36,7 @@ const UserRoleTableComponent = ({
   setTuleStatus,
 }: IAppsTableRowProps) => {
   const { enqueueSnackbar } = useSnackbar();
+  const isXSDown = useIsXSDown();
   const deleteRole = () => {
     authClient.delete(`/api/rbac/role?id=${datadetail.id}`)
       .then(res => {
@@ -79,14 +80,12 @@ const UserRoleTableComponent = ({
     <>
       <TableRow
         key={datadetail.id}
-        hover
-        style={{ cursor: "pointer" }}
       >
         <TableCell>{datadetail.id}</TableCell>
         <TableCell>{datadetail.name}</TableCell>
         <TableCell><NewSwitch checked={datadetail.enable} onChange={handleChange}/></TableCell>
-        <TableCell>{datadetail.create_time}</TableCell>
-        <TableCell>{datadetail.detail}</TableCell>
+        {!isXSDown && <TableCell>{datadetail.create_time}</TableCell>}
+        {!isXSDown && <TableCell>{datadetail.detail}</TableCell>}
         <TableCell>
           <Button onClick={deleteRole} className={classes.buttons}>
             {t("user-role.header.delete")}

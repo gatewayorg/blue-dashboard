@@ -22,6 +22,7 @@ import { IConnections } from "./home"
 import withStyles from "@material-ui/core/styles/withStyles";
 import withTheme from "@material-ui/core/styles/withTheme";
 import { StyleRules } from "@material-ui/core/styles";
+import { useIsXSDown } from "../../hooks/themeHooks";
 
 type ECOption = echarts.ComposeOption<
   | BarSeriesOption
@@ -56,6 +57,7 @@ const CacheTotalChartsComponent = ({
 classes = {},
 connectionsData,
 }: IAppsTableRowProps) => {
+  const isXSDown = useIsXSDown();
   let legendData = [],xAxisData: string[] = [], seriesData: LineSeriesOption[] = [];
   for(const i in connectionsData[0]){
     if(i !== 'time'){
@@ -95,8 +97,8 @@ connectionsData,
     legend: {
         data: legendData,
         orient: 'vertical',
-        right:20,
-        y:"center",
+        right:isXSDown?10:20,
+        y:isXSDown?"top":"center",
         textStyle:{
             color:"#fff"
         }
@@ -123,7 +125,7 @@ connectionsData,
     grid:{
       bottom:30,
       top:20,
-      right:200,
+      right:isXSDown?50:200,
       left:80,
       height:200
     },
